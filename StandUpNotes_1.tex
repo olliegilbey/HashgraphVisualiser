@@ -1,0 +1,48 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\title{StandUp 1 - HashGraph Project}
+\author{https://github.com/olliegilbey/HashgraphVisualiser}
+\date{}
+\maketitle
+
+\section{User Stories}
+\subsection{User Story 1} As a user, I want a web based interface, so that I can view it in a browser.
+\begin{itemize}
+	\item Flask webserver
+	\item HTML page
+	\item Python integration of HTML and Flask
+	\item Must display in Firefox and Chrome
+	\item Server must be stable
+\end{itemize}
+\subsection{User Story 2} As a user, I want the graph to dynamically update, so that I don't have to constantly refresh the page.
+\begin{itemize}
+	\item Only the graph must update on the HTML page
+	\item The graph must only update when a new transaction occurs
+\end{itemize}
+\subsection{User Story 3} As a user, I want to be able to change the number of nodes visualised, so that the width of gossip can be visualised at varying scale.
+\begin{itemize}
+	\item Slider bar on the web interface to change number of nodes.
+	\item Implement functionality into data extraction.
+	\item Test to find max number of nodes for processing.
+	\item Limit slider to the max number of nodes.
+\end{itemize}
+\subsection{User Story 4}As a user, I want a start and stop button, so that I can capture the graph over a specific period of transactions.
+\begin{itemize}
+	\item On click of start button, restart the live data extraction.
+	\item On click of start button, the visual must be restarted.
+	\item On click of stop button, the visual must stop.
+\end{itemize}
+\subsection{User Story 5} As a user, I want a save button to export the graph findings, so that I can save the resulting session for comparison later.
+\begin{itemize}
+	\item On save button click, export the visual to an image file.
+\end{itemize}
+\subsection{User Story 6} As a user, I want a visual representation of the HashGraph, so that I can verify finality.
+\begin{itemize}
+	\item The graph data must be available.
+	\item The graph data must undergo a conversion for the visual.
+	\item Graph theory must be applied.
+	\item Graph must be plotted.
+	\item Graph must be displayed in web interface.
+\end{itemize}
+\end{document}
