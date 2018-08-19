@@ -3,7 +3,8 @@
 #######################################################################################
 swirld, HashgraphVisualizer 
 
-app,		HashgraphDemo.jar,	   1,0,0,0,0,0,0,0,0,0, all
+app,		HashgraphVisualizerSDK.jar, 
+# app,		HashgraphDemo.jar,	   1,0,0,0,0,0,0,0,0,0, all
 # app,		GameDemo.jar,		   9000, 9000
 # app,		HelloSwirldDemo.jar
 # app,		CryptocurrencyDemo.jar
