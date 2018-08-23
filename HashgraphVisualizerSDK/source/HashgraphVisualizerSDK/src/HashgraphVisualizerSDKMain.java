@@ -11,7 +11,7 @@ import com.swirlds.platform.SwirldState;
  * into a busy loop (checking once a second) to see when the state gets the transaction. When it does, it
  * prints it, too.
  */
-public class HashgraphVisualizerSDK implements SwirldMain {
+public class HashgraphVisualizerSDKMain implements SwirldMain {
 	/** the platform running this app */
 	public Platform platform;
 	/** ID number for this member */
