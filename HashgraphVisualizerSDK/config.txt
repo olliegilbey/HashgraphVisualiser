@@ -1,12 +1,12 @@
 #######################################################################################
 # Swirlds configuration file, for automatically running multiple instances
 #######################################################################################
-swirld, HashgraphVisualizer 
+swirld, 123  
 
-app,		HashgraphVisualizerSDK.jar, 
+# app,		HashgraphVisualizerSDK.jar
 # app,		HashgraphDemo.jar,	   1,0,0,0,0,0,0,0,0,0, all
 # app,		GameDemo.jar,		   9000, 9000
-# app,		HelloSwirldDemo.jar
+app,		HelloSwirldDemo.jar
 # app,		CryptocurrencyDemo.jar
 # app,		StatsDemo.jar,		   0, 3000, 0, 100, 1024, -1
 # app,		FilesystemDemo.jar
@@ -64,8 +64,7 @@ app,		HashgraphVisualizerSDK.jar,
 #		width:            width of the board (in cells). Player moves 1 cell at a time.
 #
 #	StatsDemo.jar parameters: 
-#		headless:         1 to run in a headless mode with no windows.
-#				  0 to see a window with the results.
+#		headless:         1 to run in a headless mode with no windows. #				  0 to see a window with the results.
 #		writePeriod:      how often to write stats to the file, in milliseconds.
 #		syncDelay:        how long to pause after initiating a sync, in milliseconds.
 #		bytesPerTrans:    how many bytes make up each transaction.
