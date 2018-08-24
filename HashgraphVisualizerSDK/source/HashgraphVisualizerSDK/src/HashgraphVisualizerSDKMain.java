@@ -7,9 +7,8 @@ import com.swirlds.platform.SwirldMain;
 import com.swirlds.platform.SwirldState;
 
 /**
- * This HelloSwirld creates a single transaction, consisting of the string "Hello Swirld", and then goes
- * into a busy loop (checking once a second) to see when the state gets the transaction. When it does, it
- * prints it, too.
+ * Creates a node which constantly sends out it's name with a counter.
+ * TODO implement occasional dumps of the events for later processing
  */
 public class HashgraphVisualizerSDKMain implements SwirldMain {
 	/** the platform running this app */
@@ -20,18 +19,6 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public Console console;
 	/** sleep this many milliseconds after each sync */
 	public final int sleepPeriod = 100;
-
-	/**
-	 * This is just for debugging: it allows the app to run in Eclipse. If the config.txt exists and lists a
-	 * particular SwirldMain class as the one to run, then it can run in Eclipse (with the green triangle
-	 * icon).
-	 * 
-	 * @param args
-	 *            these are not used
-	 */
-	public static void main(String[] args) {
-		Browser.main(args);
-	}
 
 	@Override
 	public void preEvent() {
@@ -49,24 +36,20 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	@Override
 	public void run() {
 		String myName = platform.getState().getAddressBookCopy()
-				.getAddress(selfId).getSelfName();
+				.getAddress(selfId).getSelfName(); // name of event creator
+		int count = 0; // event counter
+		String lastReceived = "";
 
 		console.out.println("Hello Swirld from " + myName);
 
-		// create a transaction. For this example app,
-		// we will define each transactions to simply
-		// be a string in UTF-8 encoding.
-		byte[] transaction = myName.getBytes(StandardCharsets.UTF_8);
-
-		// Send the transaction to the Platform, which will then
-		// forward it to the State object.
-		// The Platform will also send the transaction to
-		// all the other members of the community during syncs with them.
-		// The community as a whole will decide the order of the transactions
-		platform.createTransaction(transaction);
-		String lastReceived = "";
-
 		while (true) {
+
+			// Create the transaction as a string of utf-8 characters consisting of
+			// a node's name and the transaction counter
+			byte[] transaction = (myName + count++).getBytes(StandardCharsets.UTF_8);
+			// Send the transaction. The platform passes the transaction to our state
+			// and to the local community. The community decides the order together
+			platform.createTransaction(transaction);
 			HashgraphState state = (HashgraphState) platform
 					.getState();
 			String received = state.getReceived();
