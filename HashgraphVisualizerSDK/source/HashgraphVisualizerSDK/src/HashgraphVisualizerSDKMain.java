@@ -1,6 +1,5 @@
 import java.nio.charset.StandardCharsets;
 
-import com.swirlds.platform.Console;
 import com.swirlds.platform.Event;
 import com.swirlds.platform.Platform;
 import com.swirlds.platform.SwirldMain;
@@ -19,8 +18,6 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public Platform platform;
 	/** ID number for this member */
 	public long selfId;
-	/** a console window for text output */
-	public Console console;
 	/** sleep this many milliseconds after each sync */
 	public final int sleepPeriod = 100;
 	// Socket connection for dumping data
@@ -34,8 +31,7 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public void init(Platform platform, long id) {
 		this.platform = platform;
 		this.selfId = id;
-		this.console = platform.createConsole(true); // create the window, make it visible
-		platform.setAbout("Hello Swirld v. 1.0\n"); // set the browser's "about" box
+		platform.setAbout("HashgraphSDK\n"); // set the browser's "about" box
 		platform.setSleepAfterSync(sleepPeriod);
 	}
 
@@ -46,13 +42,10 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 		int count = 0; // event counter
 		String lastReceived = "";
 
-		console.out.println("Hello Swirld from " + myName);
-
-		platform.createTransaction(transaction);
-		String lastReceived = "";
+		System.out.println("Hello Swirld from " + myName);
 
 		// Alice dumps events to the socket
-		if (myName == "Alice".getBytes()) {
+		if (myName.equals("Alice")) {
 			try {
 				ServerSocket ss = new ServerSocket(54321);
 				Socket conn = ss.accept();
@@ -75,14 +68,14 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 
 			if (!lastReceived.equals(received)) {
 				lastReceived = received;
-				console.out.println("Received: " + received); // print all received transactions
+				System.out.println(myName + " received: " + received); // print all received transactions
 			}
 			
-			if (myName == "Alice".getBytes()) {
+			if (myName.equals("Alice")) {
 				for (Event event: platform.getAllEvents()) {
-					console.out.println("Sending event " + event);
+					System.out.println(myName + " sending event " + event);
 					try {
-						dataStream.append(event.toString());
+						dataStream.append(event.toString() + "\n");
 					} catch (Exception e) {
 					}
 				}
