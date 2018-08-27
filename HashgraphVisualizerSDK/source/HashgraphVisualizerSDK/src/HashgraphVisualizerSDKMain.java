@@ -1,10 +1,14 @@
 import java.nio.charset.StandardCharsets;
 
-import com.swirlds.platform.Browser;
 import com.swirlds.platform.Console;
+import com.swirlds.platform.Event;
 import com.swirlds.platform.Platform;
 import com.swirlds.platform.SwirldMain;
 import com.swirlds.platform.SwirldState;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * This HelloSwirld creates a single transaction, consisting of the string "Hello Swirld", and then goes
@@ -20,18 +24,8 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public Console console;
 	/** sleep this many milliseconds after each sync */
 	public final int sleepPeriod = 100;
-
-	/**
-	 * This is just for debugging: it allows the app to run in Eclipse. If the config.txt exists and lists a
-	 * particular SwirldMain class as the one to run, then it can run in Eclipse (with the green triangle
-	 * icon).
-	 * 
-	 * @param args
-	 *            these are not used
-	 */
-	public static void main(String[] args) {
-		Browser.main(args);
-	}
+	// Socket connection for dumping data
+	private BufferedWriter dataStream;
 
 	@Override
 	public void preEvent() {
@@ -66,6 +60,16 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 		platform.createTransaction(transaction);
 		String lastReceived = "";
 
+		// Alice dumps events to the socket
+		if (platform.getSwirldId() == "Alice".getBytes()) {
+			try {
+				ServerSocket ss = new ServerSocket(54321);
+				Socket conn = ss.accept();
+				dataStream = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+			} catch (Exception e) {
+			}
+		}
+		
 		while (true) {
 			HashgraphState state = (HashgraphState) platform
 					.getState();
@@ -75,6 +79,21 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 				lastReceived = received;
 				console.out.println("Received: " + received); // print all received transactions
 			}
+			
+			if (platform.getSwirldId() == "Alice".getBytes()) {
+				for (Event event: platform.getAllEvents()) {
+					console.out.println("Sending event " + event);
+					try {
+						dataStream.append(event.toString());
+					} catch (Exception e) {
+					}
+				}
+				try {
+					dataStream.flush();
+				} catch (Exception e) {
+				}
+			}
+			
 			try {
 				Thread.sleep(sleepPeriod);
 			} catch (Exception e) {
