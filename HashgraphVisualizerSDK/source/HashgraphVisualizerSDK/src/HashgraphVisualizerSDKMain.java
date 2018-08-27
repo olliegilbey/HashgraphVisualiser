@@ -1,10 +1,14 @@
 import java.nio.charset.StandardCharsets;
 
-import com.swirlds.platform.Browser;
 import com.swirlds.platform.Console;
+import com.swirlds.platform.Event;
 import com.swirlds.platform.Platform;
 import com.swirlds.platform.SwirldMain;
 import com.swirlds.platform.SwirldState;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Creates a node which constantly sends out it's name with a counter.
@@ -19,6 +23,8 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public Console console;
 	/** sleep this many milliseconds after each sync */
 	public final int sleepPeriod = 100;
+	// Socket connection for dumping data
+	private BufferedWriter dataStream;
 
 	@Override
 	public void preEvent() {
@@ -42,6 +48,19 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 
 		console.out.println("Hello Swirld from " + myName);
 
+		platform.createTransaction(transaction);
+		String lastReceived = "";
+
+		// Alice dumps events to the socket
+		if (myName == "Alice".getBytes()) {
+			try {
+				ServerSocket ss = new ServerSocket(54321);
+				Socket conn = ss.accept();
+				dataStream = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+			} catch (Exception e) {
+			}
+		}
+		
 		while (true) {
 
 			// Create the transaction as a string of utf-8 characters consisting of
@@ -58,6 +77,21 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 				lastReceived = received;
 				console.out.println("Received: " + received); // print all received transactions
 			}
+			
+			if (myName == "Alice".getBytes()) {
+				for (Event event: platform.getAllEvents()) {
+					console.out.println("Sending event " + event);
+					try {
+						dataStream.append(event.toString());
+					} catch (Exception e) {
+					}
+				}
+				try {
+					dataStream.flush();
+				} catch (Exception e) {
+				}
+			}
+			
 			try {
 				Thread.sleep(sleepPeriod);
 			} catch (Exception e) {
