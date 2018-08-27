@@ -1,3 +1,4 @@
+
 import java.nio.charset.StandardCharsets;
 
 import com.swirlds.platform.Event;
@@ -8,20 +9,30 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
- * Creates a node which constantly sends out it's name with a counter.
- * TODO implement occasional dumps of the events for later processing
+ * Creates a node which constantly sends out it's name with a counter. TODO implement occasional
+ * dumps of the events for later processing
  */
 public class HashgraphVisualizerSDKMain implements SwirldMain {
-	/** the platform running this app */
+
+	/**
+	 * the platform running this app
+	 */
 	public Platform platform;
-	/** ID number for this member */
+	/**
+	 * ID number for this member
+	 */
 	public long selfId;
-	/** sleep this many milliseconds after each sync */
+	/**
+	 * sleep this many milliseconds after each sync
+	 */
 	public final int sleepPeriod = 100;
 	// Socket connection for dumping data
 	private BufferedWriter dataStream;
+	// last event sent by socket
+	private long lastEvent = 0;
 
 	@Override
 	public void preEvent() {
@@ -38,7 +49,7 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	@Override
 	public void run() {
 		String myName = platform.getState().getAddressBookCopy()
-				.getAddress(selfId).getSelfName(); // name of event creator
+				  .getAddress(selfId).getSelfName(); // name of event creator
 		int count = 0; // event counter
 		String lastReceived = "";
 
@@ -53,7 +64,7 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		while (true) {
 
 			// Create the transaction as a string of utf-8 characters consisting of
@@ -63,28 +74,44 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 			// and to the local community. The community decides the order together
 			platform.createTransaction(transaction);
 			HashgraphState state = (HashgraphState) platform
-					.getState();
+					  .getState();
 			String received = state.getReceived();
 
 			if (!lastReceived.equals(received)) {
 				lastReceived = received;
 				System.out.println(myName + " received: " + received); // print all received transactions
 			}
-			
+
 			if (myName.equals("Alice")) {
-				for (Event event: platform.getAllEvents()) {
-					System.out.println(myName + " sending event " + event);
-					try {
-						dataStream.append(event.toString() + "\n");
-					} catch (Exception e) {
+				System.out.println(myName + " is dumping events...");
+				ArrayList<Event> lastEvents = new ArrayList<>(); // stores last events to calculate latest event
+				for (Event event : platform.getAllEvents()) {
+					if (event.getConsensusOrder() > lastEvent) {
+						try {
+							// write event information to socket for new events
+							dataStream.append("{"
+									  + "selfParentConsensusOrder:" + event.getSelfParent().getConsensusOrder() + ","
+									  + "otherParentConsensusOrder:" + event.getOtherParent().getConsensusOrder() + ","
+									  + "ownConsensusOrder:" + event.getConsensusOrder() + ","
+									  + "timestamp:" + event.getConsensusTimestamp()
+									  + "}\n");
+						} catch (Exception e) {
+						}
+						lastEvents.add(event);
 					}
 				}
 				try {
 					dataStream.flush();
 				} catch (Exception e) {
 				}
+				// calculate latest event
+				for (Event event: lastEvents) {
+					if (event.getConsensusOrder() < lastEvent) {
+						lastEvent = event.getConsensusOrder();
+					}
+				}
 			}
-			
+
 			try {
 				Thread.sleep(sleepPeriod);
 			} catch (Exception e) {
