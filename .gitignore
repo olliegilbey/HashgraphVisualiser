@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
@@ -25,3 +25,16 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/sdk/HashgraphVisualizerSDK/HashgraphVisualizerSDK/nbproject/private/
+/sdk/HashgraphVisualizerSDK/HashgraphVisualizerSDK/build/
+/sdk/HashgraphVisualizerSDK/HashgraphVisualizerSDK/apps/data/
+/sdk/HashgraphVisualizerSDK/HashgraphVisualizerSDK/data/apps/
+/HashgraphVisualizerSDK/nbproject/private/
+/HashgraphVisualizerSDK/build/
+/HashgraphVisualizerSDK/dist/
+/HashgraphVisualizerSDK/nbproject/
+/HashgraphVisualizerSDK/source/HashgraphDemo/target/
+/HashgraphVisualizerSDK/source/HelloSwirldDemo/target/
+/HashgraphVisualizerSDK/source/StatsDemo/target/
+/HashgraphVisualizerSDK/source/FilesystemDemo/target/
+/HashgraphVisualizerSDK/data/fc_template/
