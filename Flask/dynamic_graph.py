@@ -3,7 +3,7 @@ plt.ion()
 
 class DynamicUpdate():
     #Suppose we know the x range
-    min_x = 0
+    min_x = 1
     max_x = 10
 
     def on_launch(self):
