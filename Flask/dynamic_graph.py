@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 plt.ion()
+
 class DynamicUpdate():
     #Suppose we know the x range
     min_x = 0
