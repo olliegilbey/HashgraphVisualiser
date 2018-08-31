@@ -1,38 +1,42 @@
 <!doctype html>
 
 <html>
-	<head>
-		<style type="text/css">
-        .header{
-			text-align: center;
-			background-color: rgb(136, 185, 229);
-			height: 70px;
-			line-height: 70px;
-		}
-		.chart{
-			margin-top: 30px;
-			text-align: center;
-		}
-		</style>
-	</head>
-	<body>
-		 <div class="header">
-			 <h2>
-				 Hashgraph Visualizer
-			 </h2>
-		 </div>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+	<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+</head>
+<body>
+	<div class="main">
+		<center>
+			<h1>
+				Hashgraph Visualizer
+			</h1>
 
-		 <div id="chart" class="chart">
-		 </div>
-	</body>
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-		<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
-		<script type="text/javascript">
-			var graphs = {{ graphJSON | safe}};
-			Plotly.plot('chart',graphs,{});        
-		</script>
+			<div id="chart" class="chart">
 
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+				<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+				<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+				<script type="text/javascript">
+
+				var graphs = {{ graphJSON | safe}};
+				Plotly.plot('chart',graphs,{});
+				</script>
+
+			</div>
+			<div class="button">
+				<input id="button" type="submit" name="submit" value="Stop">
+				<input id="button" type="submit" name="submit" value="Start">
+			</div>
+			
+			<div class="slider">
+				<label for="rangeinput">Number of Nodes</label>
+				<input id="rangeinput" type="range" min="1" max="10" value="4" onchange="rangevalue.value=value"></input>
+				<output type="text" id="rangevalue" onchange="rangeinput.value=value">4</output>
+			</div>
+		</center>
+	</div>
+</body>
 </html>
-

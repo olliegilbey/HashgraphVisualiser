@@ -4,7 +4,7 @@
 
 from flask import Flask, render_template
 import numpy as np
-import dynamicgraph 
+import dynamicgraph
 
 app = Flask(__name__)
 
@@ -12,11 +12,11 @@ app = Flask(__name__)
 def chartTest():
     d = dynamicgraph.DynamicUpdate()
     d()
-    
+
     graphJSON = ""
     for i in range(90):
         graphJSON = d.update(i, np.sin(i))
-    
+
     print "_________________________________________"
     print graphJSON
 
@@ -26,4 +26,3 @@ def chartTest():
 
 if __name__ == '__main__':
     app.run(debug = True)
-
