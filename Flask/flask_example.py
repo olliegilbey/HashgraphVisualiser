@@ -1,6 +1,9 @@
+#
+# https://code.tutsplus.com/tutorials/charting-using-plotly-in-python--cms-30286
+#
+
 from flask import Flask, render_template
 import numpy as np
-import pandas
 import dynamicgraph 
 
 app = Flask(__name__)
@@ -9,12 +12,16 @@ app = Flask(__name__)
 def chartTest():
     d = dynamicgraph.DynamicUpdate()
     d()
-
-    for i in range(180):
-        graph_html = d.update(i, np.sin(i))
+    
+    graphJSON = ""
+    for i in range(90):
+        graphJSON = d.update(i, np.sin(i))
+    
+    print "_________________________________________"
+    print graphJSON
 
     return render_template('untitled.html', name = 'Live Visualizer',
-            url=graph_html)
+            graphJSON = graphJSON)
 
 
 if __name__ == '__main__':
