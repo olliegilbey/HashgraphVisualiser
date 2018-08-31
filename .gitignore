@@ -34,3 +34,11 @@ hs_err_pid*
 /HashgraphVisualizerSDK/build/
 /.metadata/
 /.metadata/
+/HashgraphVisualizerSDK/build/
+/HashgraphVisualizerSDK/dist/
+/HashgraphVisualizerSDK/nbproject/
+/HashgraphVisualizerSDK/source/HashgraphDemo/target/
+/HashgraphVisualizerSDK/source/HelloSwirldDemo/target/
+/HashgraphVisualizerSDK/source/StatsDemo/target/
+/HashgraphVisualizerSDK/source/FilesystemDemo/target/
+/HashgraphVisualizerSDK/data/fc_template/
