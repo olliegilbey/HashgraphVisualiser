@@ -12,8 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * Creates a node which constantly sends out it's name with a counter. TODO implement occasional
- * dumps of the events for later processing
+ * Creates a node which constantly sends out it's name with a counter.
  */
 public class HashgraphVisualizerSDKMain implements SwirldMain {
 
@@ -28,11 +27,13 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	/**
 	 * sleep this many milliseconds after each sync
 	 */
-	public final int sleepPeriod = 100;
+	public final int sleepPeriod = 4000;
 	// Socket connection for dumping data
 	private BufferedWriter dataStream;
 	// last event sent by socket
 	private long lastEvent = 0;
+	// event counter
+	private int count = 1;
 
 	@Override
 	public void preEvent() {
@@ -50,8 +51,6 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 	public void run() {
 		String myName = platform.getState().getAddressBookCopy()
 				  .getAddress(selfId).getSelfName(); // name of event creator
-		int count = 0; // event counter
-		String lastReceived = "";
 
 		System.out.println("Hello Swirld from " + myName);
 
@@ -75,13 +74,7 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 			platform.createTransaction(transaction);
 			HashgraphState state = (HashgraphState) platform
 					  .getState();
-			String received = state.getReceived();
-
-			if (!lastReceived.equals(received)) {
-				lastReceived = received;
-				System.out.println(myName + " received: " + received); // print all received transactions
-			}
-
+			
 			if (myName.equals("Alice")) {
 				System.out.println(myName + " is dumping events...");
 				ArrayList<Event> lastEvents = new ArrayList<>(); // stores last events to calculate latest event
@@ -93,7 +86,9 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 									  + "selfParentConsensusOrder:" + event.getSelfParent().getConsensusOrder() + ","
 									  + "otherParentConsensusOrder:" + event.getOtherParent().getConsensusOrder() + ","
 									  + "ownConsensusOrder:" + event.getConsensusOrder() + ","
-									  + "timestamp:" + event.getConsensusTimestamp()
+									  + "timestamp:" + event.getConsensusTimestamp() + ","
+									  + "creatorId:" + event.getCreatorId() + ","
+									  + "otherId:" + event.getOtherId()
 									  + "}\n");
 						} catch (Exception e) {
 						}
@@ -106,7 +101,7 @@ public class HashgraphVisualizerSDKMain implements SwirldMain {
 				}
 				// calculate latest event
 				for (Event event: lastEvents) {
-					if (event.getConsensusOrder() < lastEvent) {
+					if (event.getConsensusOrder() > lastEvent) {
 						lastEvent = event.getConsensusOrder();
 					}
 				}
