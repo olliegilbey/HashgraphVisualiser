@@ -19,7 +19,8 @@
 *.zip
 *.tar.gz
 *.rar
-
+.metadata
+metadata/
 # For .tex files only to be uploaded.
 *.pdf
 *.aux

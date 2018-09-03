@@ -48,15 +48,16 @@ label,output {
 input[type=submit]{
 	transition-duration: 0.4s;
 	background-color: #f32e1b !important;
-	padding: 0;
+	padding: 0px;
 	margin: 0;
 	border: none;
 	background: none;
 	color: #fff;
 	width: 50%;
-	height: 4em;
+	height: 3.2em;
 	float:left;
 	box-shadow: 7px 10px 8px #222;
+	font-size: 20px;
 
 }
 
