@@ -11,12 +11,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>CryptocurrencyDemo</module>
-		<module>GameDemo</module>
-		<module>HashgraphDemo</module>
-		<module>HelloSwirldDemo</module>
-		<module>StatsDemo</module>
-		<module>FilesystemDemo</module>
 		<module>HashgraphVisualizerSDK</module>
 	</modules>
 
