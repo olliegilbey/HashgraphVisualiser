@@ -37,6 +37,7 @@ h1 {
 .slider{
 	width: 80%;
 	margin: 30px;
+	margin-top: 0;
 	height: 4em;
 }
 
