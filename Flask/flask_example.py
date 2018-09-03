@@ -1,4 +1,4 @@
-# 
+#
 # https://code.tutsplus.com/tutorials/charting-using-plotly-in-python--cms-30286
 #
 
@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 @app.route('/test', methods=['GET','POST'])
 def chartTest():
-
     number_of_nodes = 0
     d = dynamicgraph.DynamicUpdate()
     d()
@@ -42,7 +41,7 @@ def chartTest():
 
 
 
-    return render_template('untitled.html', name = 'Live Visualizer',
+    return render_template('untitled.html', SliderVal=number_of_nodes, name = 'Live Visualizer',
             graphJSON = graphJSON)
 
 

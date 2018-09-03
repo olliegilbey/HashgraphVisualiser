@@ -32,8 +32,8 @@
 					<input id="button" type="submit" name="Start" value="Start">
 					<div class="slider">
 						<label for="rangeinput">Number of Nodes</label>
-						<input id="rangeinput" name="slider" type="range" min="1" max="10" value="4" onchange="rangevalue.value=value; this.form.submit()"></input>
-						<output type="text" id="rangevalue" onchange="rangeinput.value=value; this.form.submit()">4</output>
+						<input id="rangeinput" name="slider" type="range" min="1" max="10" value="{{SliderVal}}" onchange="rangevalue.value=value; this.form.submit()"></input>
+						<output type="text" id="rangevalue" onchange="rangeinput.value=value">{{SliderVal}}</output>
 					</div>
 				</form>
 			</div>

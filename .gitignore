@@ -21,6 +21,8 @@
 *.rar
 .metadata
 metadata/
+.idea
+.idea/
 # For .tex files only to be uploaded.
 *.pdf
 *.aux
