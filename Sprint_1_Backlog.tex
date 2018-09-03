@@ -1,0 +1,84 @@
+\documentclass[a4paper,10pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+
+\title{Sprint 1 Team 9 Hashgraph Backlog}
+\author{Wernich Baumgarten \textless 19896913 \textgreater \\
+	Simon Dennis \textless 19770235 \textgreater  \\
+	Oliver Gilbey \testless 17839688 \textgreater  \\
+	Ryan Lang \textless 19066171 \textgreater  \\
+	Simon\'e van Zyl \textless 18395317 \textgreater  \\
+	Bernard Wiesner \textless 19790155 \textgreater}
+\date{}
+
+\begin{document}
+\maketitle
+\section{Sprint 1 Backlog}
+\subsection{US1: As a user, I want a web based interface, so that I can view it in a browser.}
+Completed
+\begin{itemize}
+ \item Flask webserver
+ \item HTML page
+ \item Python integration of HTML and Flask
+ \item Must display in Firefox and Chrome
+\end{itemize}
+Incomplete
+\begin{itemize}
+ \item Server must be stable
+\end{itemize}
+
+\subsection{US2: As a user, I want the graph to dynamically update, so that I don’t have to constantly refresh the page.}
+Completed
+\begin{itemize}
+ \item The graph must only update when a new transaction occurs
+ \item Graph requires X, Y co-ordinates
+\end{itemize}
+Incomplete
+\begin{itemize}
+ \item Only the graph must update on the HTML page
+\end{itemize}
+
+\subsection{US3: As a user, I want to be able to change the number of nodes visualised, so that the width of gossip can be visualised at varying scale.}
+Completed
+\begin{itemize}
+ \item Slider bar on the web interface to change the number of nodes
+\end{itemize}
+Incomplete
+\begin{itemize}
+ \item Implement functionality into data extraction.
+ \item Test to find max number of nodes for processing.
+ \item Limit slider to the max number of nodes.
+\end{itemize}
+
+\subsection{US4: As a user, I want a start and stop button, so that I can capture the graph over a specific period of transactions.}
+Completed\\
+None\\
+Incomplete
+\begin{itemize}
+ \item On click of start button, restart the live data extraction.
+ \item On click of start button, the visual must be restarted.
+ \item On click of stop button, the visual must stop.
+\end{itemize}
+
+\subsection{US5: As a user, I want a save button to export the graph findings, so that I can save the resulting session for comparison later.}
+Completed\\
+None\\
+Incomplete
+\begin{itemize}
+ \item On save button click, export the visual to an image file.
+\end{itemize}
+
+\subsection{US6: As a user, I want a visual representation of the HashGraph, so that I can verify finality.}
+Completed
+\begin{itemize}
+ \item The graph data must be available
+ \item Graph must be plotted.
+ \item Graph must be displayed in web interface.
+\end{itemize}
+Incomplete
+\begin{itemize}
+ \item Graph theory must be applied.
+\end{itemize}
+
+\end{document}
