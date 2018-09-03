@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/test', methods=['GET','POST'])
 def chartTest():
-    number_of_nodes = 0
+    number_of_nodes = 4
     d = dynamicgraph.DynamicUpdate()
     d()
 
