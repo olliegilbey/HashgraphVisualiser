@@ -1,23 +1,49 @@
 import socket
 import dummy as visualiser
 from flask import Flask, render_template
+from flask import request
 import dynamicgraph
+import thread
 
 app = Flask(__name__)
+graphJSON = ""
+d = dynamicgraph.DynamicUpdate()
+d()
 
-@app.route('/test')
+@app.route('/test', methods=['GET','POST'])
+def routeTest():
+    number_of_nodes = 4
+    global graphJSON
+
+    print("FORM:")
+    print(request.form)
+    # For button and slider handling
+
+    if request.method == "POST":
+        number_of_nodes = request.values.get('slider')
+        print "Number of Nodes Showing: " + number_of_nodes
+        #print the number of nodes
+        if request.form.get('Stop') == 'Stop':
+            print("Stop Pressed")
+        elif request.form.get('Start') == 'Start':
+            print("Start Pressed")
+        else:
+            print("Slider Changed or Nothing")
+
+    return render_template('untitled.html',SliderVal = number_of_nodes, name = 'Live Visualizer',
+            graphJSON = graphJSON)
+
+
 def charTest(sx, sy, rx, ry):
-    d = dynamicgraph.DynamicUpdate()
-    d()
-
-    graphJSON = ""
+    global graphJSON
     graphJSON = d.update(sx, sy)
     graphJSON = d.update(rx, ry)
+    graphJSON = d.update(None, None)
+    #print graphJSON
 
-    print graphJSON
-
-    return render_template('untitled.html', name = 'Live Visualizer',
-            graphJSON = graphJSON)
+   # Run the flask app in a separate thread
+def flaskThread():
+    app.run()
 
 def receivePackets():
     TCP_IP = 'localhost'
@@ -33,7 +59,9 @@ def receivePackets():
         try:
             s.connect((TCP_IP, TCP_PORT))
             print "Connected!"
-            #app.run(debug = True)
+            
+            thread.start_new_thread(flaskThread,())
+
             data = s.recv(BUFFER_SIZE)
             while data:
                 packet = data.split("\n")
@@ -64,7 +92,7 @@ def receivePackets():
                             rid = m[1]
                             rid = rid.replace("}", "")
                     print "Sender:({0},{1}), Receiver:({2},{3})".format(sid, sic, rid, ric)
-                    #charTest(sid, sic, rid, ric)
+                    charTest(sid, sic, rid, ric)
             s.close()
             break
         except Exception as e:

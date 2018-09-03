@@ -29,7 +29,8 @@ class DynamicUpdate():
 
         data = [ go.Scatter(
                     x = x_data,
-                    y = y_data) ]
+                    y = y_data,
+                    mode = 'markers+lines') ]
         graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
         #print graphJSON
         #plot_str = py.offline.plot(data, include_plotlyjs=False, output_type='div')
@@ -38,5 +39,5 @@ class DynamicUpdate():
     def __call__(self):
         global x_data, y_data
         self.on_launch()
-        print "x = [] = ", x_data
-        print "y = [] = ", y_data
+        #print "x = [] = ", x_data
+        #print "y = [] = ", y_data
