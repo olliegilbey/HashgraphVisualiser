@@ -41,3 +41,23 @@ hs_err_pid*
 /HashgraphVisualizerSDK/source/StatsDemo/target/
 /HashgraphVisualizerSDK/source/FilesystemDemo/target/
 /HashgraphVisualizerSDK/data/fc_template/
+
+# From lachesis .gitignore:
+# IDE
+.vscode
+.idea/
+
+# Go test output
+*/*.test
+*/*.out
+
+# Build output
+build
+
+# Dependencies
+vendor
+
+# gomobile compilation output
+*.aar
+*.jar
+
