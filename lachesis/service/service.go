@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/andrecronje/lachesis/node"
+	"github.com/group9/HashgraphVisualiser/lachesis/node"
 	"github.com/sirupsen/logrus"
 )
 

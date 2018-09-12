@@ -6,9 +6,9 @@ import (
 
 	"time"
 
-	"github.com/andrecronje/lachesis/crypto"
-	"github.com/andrecronje/lachesis/hashgraph"
-	bproxy "github.com/andrecronje/lachesis/proxy/lachesis"
+	"github.com/group9/HashgraphVisualiser/lachesis/crypto"
+	"github.com/group9/HashgraphVisualiser/lachesis/hashgraph"
+	bproxy "github.com/group9/HashgraphVisualiser/lachesis/proxy/lachesis"
 	"github.com/sirupsen/logrus"
 )
 

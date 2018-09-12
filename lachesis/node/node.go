@@ -10,9 +10,9 @@ import (
 
 	"strconv"
 
-	hg "github.com/andrecronje/lachesis/hashgraph"
-	"github.com/andrecronje/lachesis/net"
-	"github.com/andrecronje/lachesis/proxy"
+	hg "github.com/group9/HashgraphVisualiser/lachesis/hashgraph"
+	"github.com/group9/HashgraphVisualiser/lachesis/net"
+	"github.com/group9/HashgraphVisualiser/lachesis/proxy"
 )
 
 type Node struct {

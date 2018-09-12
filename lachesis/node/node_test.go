@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andrecronje/lachesis/common"
-	"github.com/andrecronje/lachesis/crypto"
-	hg "github.com/andrecronje/lachesis/hashgraph"
-	"github.com/andrecronje/lachesis/net"
-	aproxy "github.com/andrecronje/lachesis/proxy/app"
+	"github.com/group9/HashgraphVisualiser/lachesis/common"
+	"github.com/group9/HashgraphVisualiser/lachesis/crypto"
+	hg "github.com/group9/HashgraphVisualiser/lachesis/hashgraph"
+	"github.com/group9/HashgraphVisualiser/lachesis/net"
+	aproxy "github.com/group9/HashgraphVisualiser/lachesis/proxy/app"
 	"github.com/sirupsen/logrus"
 )
 

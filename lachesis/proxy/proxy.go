@@ -1,6 +1,6 @@
 package proxy
 
-import "github.com/andrecronje/lachesis/hashgraph"
+import "github.com/group9/HashgraphVisualiser/lachesis/hashgraph"
 
 type AppProxy interface {
 	SubmitCh() chan []byte
