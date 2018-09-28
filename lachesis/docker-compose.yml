@@ -1,0 +1,16 @@
+version: '3'
+services:
+        node1:
+                environment:
+                        - DATADIR=./build/node1
+                build: .
+        node2:
+                environment:
+                        - DATADIR=./build/node2
+                build: .
+        node3:
+                environment:
+                        - DATADIR=./build/node3
+                build: .
+
+

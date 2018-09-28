@@ -1,7 +1,5 @@
 FROM golang:1.8
 
-ENV DATADIR=./build/node3
-
 WORKDIR /go/src/app
 COPY . .
 
