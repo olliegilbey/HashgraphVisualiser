@@ -1,6 +1,8 @@
 version: '3'
 services:
         node1:
+                ports:
+                        - "8000:8000"
                 environment:
                         - DATADIR=./build/node1
                 build: .
