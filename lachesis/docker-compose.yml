@@ -2,17 +2,21 @@ version: '3'
 services:
         node1:
                 ports:
-                        - "8000:8000"
+                        - "8001:8000"
                 environment:
-                        - DATADIR=./build/node1
+                        - DATADIR=./node_config/node1
                 build: .
         node2:
+                ports:
+                        - "8002:8000"
                 environment:
-                        - DATADIR=./build/node2
+                        - DATADIR=./node_config/node2
                 build: .
         node3:
+                ports:
+                        - "8003:8000"
                 environment:
-                        - DATADIR=./build/node3
+                        - DATADIR=./node_config/node3
                 build: .
 
 
