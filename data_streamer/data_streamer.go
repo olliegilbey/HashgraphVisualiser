@@ -185,7 +185,7 @@ func main() {
 		// output new lines to draw
 		fmt.Println("write new lines")
 		for _, v := range newLines {
-			data := strconv.Itoa(v.x1) + ";" + strconv.Itoa(v.y1) + ";" + strconv.Itoa(v.x2) + ";" + strconv.Itoa(v.y2) + ";" + v.color
+			data := strconv.Itoa(v.x1) + ";" + strconv.Itoa(v.y1) + ";" + strconv.Itoa(v.x2) + ";" + strconv.Itoa(v.y2) + ";" + v.color + "\n"
 			fmt.Println("sending line " + data)
 			output.Write([]byte(data))
 		}
