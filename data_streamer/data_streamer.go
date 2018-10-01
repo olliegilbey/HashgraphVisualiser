@@ -10,7 +10,9 @@ import (
 	"time"
 )
 
+// hashgraph data structs
 type event struct {
+	Key string
 	IsFamous  bool
 	IsWitness bool
 	Parents   []string
@@ -22,6 +24,7 @@ type round struct {
 	Events map[string]event
 }
 
+// json structs
 type jsonRound struct {
 	Events map[string]jsonRoundEvent
 }
@@ -45,12 +48,29 @@ type jsonEventBody struct {
 	BlockSignatures []string
 }
 
+// visualizer structs
+type node struct {
+	x int
+	y int
+}
+
+type line struct {
+	x1 int
+	x2 int
+	y1 int
+	y2 int
+	color string
+}
+
 func main() {
 
 	var participants []string
 	var currentRound round
 	var consensusEvents []string
 	var output net.Conn
+	var graphNodes map[string]node = make(map[string]node)
+	var newLines = []line
+	var currX = 0
 
 	// wait for listen socket connection
 	l, err := net.Listen("tcp", "localhost:3333")
@@ -69,12 +89,6 @@ func main() {
 	for key := range participantJson {
 		participants = append(participants, key)
 	}
-	data, err := json.Marshal(participants)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("write participants")
-	output.Write(data)
 
 	// constantly get next round of events and output
 	var currentRoundNumber int
@@ -98,6 +112,7 @@ func main() {
 		json.Unmarshal(getData("http://localhost:8001/round/"+strconv.Itoa(currentRoundNumber)), &currentRoundJson)
 		for key, value := range currentRoundJson.Events {
 			var newEvent event
+			newEvent.Key = key
 			if value.Famous > 0 {
 				newEvent.IsFamous = true
 			} else {
@@ -120,19 +135,56 @@ func main() {
 		// populate consensusEvents
 		json.Unmarshal(getData("http://localhost:8001/consensusevents"), &consensusEvents)
 
-		// output
-		data, err := json.Marshal(currentRound)
-		if err != nil {
-			fmt.Println(err)
+		// make nodes and lines for new events
+		newLines = make([]line, len(currentRound.Events))
+		for (key, index := currentRound.Events) {
+			var parentLine line
+			var otherLine line
+			var selfParent node
+			var otherParent node
+			if index.Parents[0] == "" {
+				var newNode node
+				newNode.x = currX
+				currX = currX + 1
+				newNode.y = 0
+				graphNodes[key] = newNode
+			} else {
+				var newNode node
+				selfParent = graphNodes[index.Parents[0].Key]
+				otherParent = graphNodes[index.Parents[1].Key]
+				newNode.x = selfParent.x
+				newNode.y = selfParent.y + 1
+				graphNodes[key] = newNode
+				parentLine.x1 = selfParent.x
+				parentLine.y1 = selfParent.y
+				parentLine.x2 = graphNodes[key].x
+				parentLine.y2 = graphNodes[key].y
+				otherLine.x1 = otherParent.x
+				otherLine.y1 = otherParent.y
+				otherLine.x2 = graphNodes[key].x
+				otherLine.y2 = graphNodes[key].y
+				if index.IsWitness {
+					parentLine.color = "green"
+					otherLine.color = "green"
+				}
+				if index.IsFamous {
+					parentLine.color = "blue"
+					otherLine.color = "blue"
+				}
+				newLines = append(newLines, parentLine)
+				newLines = append(newLines, otherLine)
+			}
 		}
-		fmt.Println("write current round")
-		output.Write(data)
-		data, err = json.Marshal(consensusEvents)
-		if err != nil {
-			fmt.Println(err)
+
+		// output new lines to draw
+		fmt.Println("write new lines")
+		for _, v := newLines {
+			data := Itoa(v.x1) + ";" + Itoa(v.y1) + ";" + Itoa(v.x2) + ";" + Itoa(v,y2) + ";" + v.color
+			fmt.Println("sending line " + data)
+			output.Write(data)
+			output.Read(make([]byte, 2))
 		}
-		fmt.Println("write consensus events")
-		output.Write(data)
+
 	}
 
 }
