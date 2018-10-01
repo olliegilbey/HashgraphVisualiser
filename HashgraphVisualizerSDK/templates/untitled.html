@@ -1,44 +1,166 @@
 <!doctype html>
 
 <html>
-<head>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
-	<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-</head>
-<body>
-	<div class="main">
-		<center>
-			<h1>
-				Hashgraph Visualiser
-			</h1>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+		<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+	</head>
+	<body>
+		<div class="main">
+			<center>
+				<h1>
+					Hashgraph Visualiser
+				</h1>
 
-			<div id="chart" class="chart">
+				<div id="chart" class="chart">
 
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-				<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-				<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
-				<script type="text/javascript">
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+					<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+					<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+					<script
+   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+					<script
+   src="https://cdnjs.cloudflare.com/ajax/libs/web-socket-js/1.0.0/web_socket.min.js"></script>
+					<script type="text/javascript">
+						//@see https://community.plot.ly/t/live-streaming-
+						// data-using-javascript/1645
+						function rand() {
+							  return Math.random();
+						}
+						
+						var socket = new WebSocket("ws://localhost:5000");
+						
+						/* On socket connected */
+						socket.onopen = function() {
+							console.log("socket.on.connection")
+							
+							var trace1 = {x:[1], y:[1], mode: 'markers+lines',
+							type: 'scatter'};
+							var plotdata = [trace1];
 
-				var graphs = {{ graphJSON | safe}};
-				Plotly.plot('chart',graphs,{});
-				</script>
+							Plotly.plot('chart', plotdata);
 
-			</div>
-			<div class="button">
-				<form method="post" action="/test" onsubmit="this.form.submit(); return false">
-					<input id="button" type="submit" name="Stop" value="Stop">
-					<input id="button" type="submit" name="Start" value="Start">
-					<div class="slider">
-						<label for="rangeinput">Number of Nodes</label>
-						<input id="rangeinput" name="slider" type="range" min="1" max="10" value="{{SliderVal}}" onchange="rangevalue.value=value; this.form.submit()"></input>
-						<output type="text" id="rangevalue" onchange="rangeinput.value=value">{{SliderVal}}</output>
+							console.log("Web Socket is open. sending msg");
+							socket.send("hello from client");
+						};
+
+						socket.onmessage = function(s) {
+							console.log("received msg");
+							console.log(s.data);
+
+							var t = s.data;
+
+							var data = t.split(";");
+							var parentx = parseInt(data[0], 10);
+							console.log(parentx);
+							var parenty = parseInt(data[1], 10);
+							console.log(parenty);
+							var nodex = parseInt(data[2], 10);
+							console.log(nodex);
+							var nodey = parseInt(data[3], 10);
+							console.log(nodey);
+							
+							var trace1 = {x:[nodex], y:[nodey],
+								mode:'markers+lines', type: 'scatter'};
+
+							// var trace2 = {x:[nodex], y:[nodey], 
+							//	mode: 'lines',
+							//type: 'scatter'};
+
+							var plotdata = [trace1];
+							
+							//graphing
+							var myPlot = document.getElementById('chart'),
+							layout = {
+								hovermode:'closest',
+								title: "Live Data Streaming",
+								xaxis: {
+									title: "X Axis",
+									titlefont: {
+										family:	"Verdana,Sans-serif",
+										size: 18,
+										color: "#7f7f7f"
+									}
+								},
+								yaxis: {
+									title: "Live Data",
+									titlefont: {
+										family:	"Verdana, Sans-serif",
+										size: 18,
+										color: "#7f7f7f"
+									}
+								}
+							};
+
+							var update = {
+								x: [[nodex]],
+								    y: [[nodey]]
+							};
+
+							//data = [ { x: [0,1,2,3,4,5,6], y:[temp],
+							//	type:'scatter'} ],
+							Plotly.extendTraces(myPlot, update, [0]);
+
+						};// end on message
+
+						/*const net  = require('net');
+						const fs = require('fs');
+						const socketPath = '/tmp/node-python-sock';
+
+						const handler = (socket) => {
+							socket.on('data', (bytes) => {
+								// Decode byte string
+								    const msg = bytes.toString();
+								    console.log(msg);
+								    if (msg === 'python connected')
+										return socket.write('hi');
+									// Let python know we want it to close
+									socket.write('end');
+								    // Exit the process
+								    return process.exit(0);
+							});
+						};
+
+						// Remove an existing socket
+						fs.unlink(
+						  socketPath,
+						// Create the server, give it our callback handler and listen at the path
+						() => net.createServer(handler).listen(socketPath)
+						);*/
+						
+						/*var socket = io.connect("http://localhost:5000");
+
+						console.log("connected");	
+						
+			
+						socket.on('connection', function(createplot) {
+													}); //end socket.on connection
+
+						socket.on('temp', function(temp){
+							
+							});*/ // end socket.on temp
+							
+							//OLD
+							//var graphs = {{ graphJSON | safe}};
+							//Plotly.plot('chart',graphs,{});
+						</script>
+
 					</div>
-				</form>
-			</div>
+					<div class="button">
+						<form method="post" action="/test" onsubmit="this.form.submit(); return false">
+							<input id="button" type="submit" name="Stop" value="Stop">
+							<input id="button" type="submit" name="Start" value="Start">
+							<div class="slider">
+								<label for="rangeinput">Number of Nodes</label>
+								<input id="rangeinput" name="slider" type="range" min="1" max="10" value="{{SliderVal}}" onchange="rangevalue.value=value; this.form.submit()"></input>
+								<output type="text" id="rangevalue" onchange="rangeinput.value=value">{{SliderVal}}</output>
+							</div>
+						</form>
+					</div>
 
-		</center>
-	</div>
-</body>
-</html>
+				</center>
+			</div>
+		</body>
+	</html>
