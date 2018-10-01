@@ -181,7 +181,7 @@ func main() {
 		for _, v := range newLines {
 			data := strconv.Itoa(v.x1) + ";" + strconv.Itoa(v.y1) + ";" + strconv.Itoa(v.x2) + ";" + strconv.Itoa(v.y2) + ";" + v.color
 			fmt.Println("sending line " + data)
-			output.Write(data)
+			output.Write([]byte(data))
 			output.Read(make([]byte, 2))
 		}
 
