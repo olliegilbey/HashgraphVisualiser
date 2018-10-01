@@ -137,7 +137,7 @@ func main() {
 
 		// make nodes and lines for new events
 		newLines = make([]line, len(currentRound.Events))
-		for (key, index := currentRound.Events) {
+		for key, index := range currentRound.Events {
 			var parentLine line
 			var otherLine line
 			var selfParent node
@@ -178,7 +178,7 @@ func main() {
 
 		// output new lines to draw
 		fmt.Println("write new lines")
-		for _, v := newLines {
+		for _, v := range newLines {
 			data := Itoa(v.x1) + ";" + Itoa(v.y1) + ";" + Itoa(v.x2) + ";" + Itoa(v,y2) + ";" + v.color
 			fmt.Println("sending line " + data)
 			output.Write(data)
