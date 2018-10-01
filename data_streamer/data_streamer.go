@@ -149,7 +149,7 @@ func main() {
 				currX = currX + 1
 				newNode.y = 0
 				graphNodes[key] = newNode
-				fmt.Println("node " + newNode)
+				fmt.Println(newNode)
 			} else {
 				fmt.Println("non-root event")
 				var newNode node
@@ -178,7 +178,7 @@ func main() {
 				}
 				newLines = append(newLines, parentLine)
 				newLines = append(newLines, otherLine)
-				fmt.Println("node " + newNode)
+				fmt.Println(newNode)
 			}
 		}
 
