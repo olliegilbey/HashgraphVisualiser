@@ -70,6 +70,7 @@ func main() {
 	var output net.Conn
 	var graphNodes map[string]node = make(map[string]node)
 	var newLines []line
+	var currX = 0
 
 	// wait for listen socket connection
 	l, err := net.Listen("tcp", "localhost:3333")
@@ -144,7 +145,8 @@ func main() {
 			if index.Parents[0] == "" {
 				fmt.Println("root event")
 				var newNode node
-				newNode.x = 0
+				newNode.x = currX
+				currX = currX + 1
 				newNode.y = 0
 				graphNodes[key] = newNode
 				fmt.Println(newNode)
