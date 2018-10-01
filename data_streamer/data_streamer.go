@@ -166,10 +166,12 @@ func main() {
 				if index.IsWitness {
 					parentLine.color = "green"
 					otherLine.color = "green"
-				}
-				if index.IsFamous {
+				} else if index.IsFamous {
 					parentLine.color = "blue"
 					otherLine.color = "blue"
+				} else {
+					parentLine.color = "black"
+					otherLine.color = "black"
 				}
 				newLines = append(newLines, parentLine)
 				newLines = append(newLines, otherLine)
@@ -182,7 +184,6 @@ func main() {
 			data := strconv.Itoa(v.x1) + ";" + strconv.Itoa(v.y1) + ";" + strconv.Itoa(v.x2) + ";" + strconv.Itoa(v.y2) + ";" + v.color
 			fmt.Println("sending line " + data)
 			output.Write([]byte(data))
-			output.Read(make([]byte, 2))
 		}
 
 	}
