@@ -75,7 +75,6 @@ func main() {
 	}
 	fmt.Println("write participants")
 	output.Write(data)
-	output.Read(make([]byte, 2))
 
 	// constantly get next round of events and output
 	var currentRoundNumber int
@@ -128,14 +127,12 @@ func main() {
 		}
 		fmt.Println("write current round")
 		output.Write(data)
-		output.Read(make([]byte, 2))
 		data, err = json.Marshal(consensusEvents)
 		if err != nil {
 			fmt.Println(err)
 		}
 		fmt.Println("write consensus events")
 		output.Write(data)
-		output.Read(make([]byte, 2))
 	}
 
 }
