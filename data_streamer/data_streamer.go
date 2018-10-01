@@ -189,6 +189,7 @@ func main() {
 			fmt.Println("sending line " + data)
 			output.Write([]byte(data))
 		}
+		newLines = newLines[:0]
 
 	}
 
