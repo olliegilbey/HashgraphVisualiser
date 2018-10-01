@@ -145,8 +145,7 @@ func main() {
 			if index.Parents[0] == "" {
 				fmt.Println("root event")
 				var newNode node
-				newNode.x = currX
-				currX = currX + 1
+				newNode.x = 0
 				newNode.y = 0
 				graphNodes[key] = newNode
 				fmt.Println(newNode)
@@ -155,7 +154,7 @@ func main() {
 				var newNode node
 				selfParent = graphNodes[index.Parents[0]]
 				otherParent = graphNodes[index.Parents[1]]
-				newNode.x = selfParent.x
+				newNode.x = selfParent.x + 1
 				newNode.y = selfParent.y + 1
 				graphNodes[key] = newNode
 				parentLine.x1 = selfParent.x
