@@ -70,7 +70,6 @@ func main() {
 	var output net.Conn
 	var graphNodes map[string]node = make(map[string]node)
 	var newLines []line
-	var currX = 0
 
 	// wait for listen socket connection
 	l, err := net.Listen("tcp", "localhost:3333")
