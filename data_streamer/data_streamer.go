@@ -69,7 +69,7 @@ func main() {
 	var consensusEvents []string
 	var output net.Conn
 	var graphNodes map[string]node = make(map[string]node)
-	var newLines = []line
+	var newLines []line
 	var currX = 0
 
 	// wait for listen socket connection
@@ -150,8 +150,8 @@ func main() {
 				graphNodes[key] = newNode
 			} else {
 				var newNode node
-				selfParent = graphNodes[index.Parents[0].Key]
-				otherParent = graphNodes[index.Parents[1].Key]
+				selfParent = graphNodes[index.Parents[0]]
+				otherParent = graphNodes[index.Parents[1]]
 				newNode.x = selfParent.x
 				newNode.y = selfParent.y + 1
 				graphNodes[key] = newNode
@@ -179,7 +179,7 @@ func main() {
 		// output new lines to draw
 		fmt.Println("write new lines")
 		for _, v := range newLines {
-			data := Itoa(v.x1) + ";" + Itoa(v.y1) + ";" + Itoa(v.x2) + ";" + Itoa(v,y2) + ";" + v.color
+			data := strconv.Itoa(v.x1) + ";" + strconv.Itoa(v.y1) + ";" + strconv.Itoa(v.x2) + ";" + strconv.Itoa(v.y2) + ";" + v.color
 			fmt.Println("sending line " + data)
 			output.Write(data)
 			output.Read(make([]byte, 2))
