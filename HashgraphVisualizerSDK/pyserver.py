@@ -22,6 +22,9 @@ websocket_answer = (
 GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+awshost = "localhost"
+awsport = 3333
 host = "127.0.0.1"
 port = 5000
 
@@ -29,9 +32,10 @@ print (host)
 print (port)
 #client.connect(socket_path)
 #client.send(b'python connected')
-
 serversocket.bind((host, port))
 serversocket.listen(5)
+socket.connect((awshost, awsport))
+
 print("socket listening")
 
 #accept connections from outside
@@ -41,7 +45,7 @@ print("client accepted. yayayayayayay")
 text = clientsocket.recv(1024)
 print("received from client: ", text)
 
-def EncodeWebSockSend(socket,data):
+def EncodeWebSockSend(socket, data):
     bytesFormatted = bytearray()
     bytesFormatted.append(0x81) #129 in decimal, indicates text format
     print("bytesFormatted", bytesFormatted)
@@ -68,7 +72,7 @@ def EncodeWebSockSend(socket,data):
     #bytesFormatted = bytes(bytesFormatted)
     bytesFormatted.extend(data)
     print("bytesFormatted", bytesFormatted)
-    socket.send(bytesFormatted) 
+    socket.send(bytesFormatted)
 
 key = (re.search('Sec-WebSocket-Key:\s+(.*?)[\n\r]+', text)
     .groups()[0]
@@ -84,16 +88,19 @@ print("------------response sent -----------")
 # on open reply
 print("------------Received from Client: ---------------")
 print clientsocket.recv(1024)
- 
-parentx = 1
-parenty = 0
+
+#parentx = 1
+#parenty = 0
 while 1:
-    nodex = random.randint(1,5)
-    nodey = parenty + 1
-    txt = "" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)
-    EncodeWebSockSend(clientsocket, txt)
-    parentx = nodex;
-    parenty = nodey;
+    #nodex = random.randint(1,5)
+    #nodey = parenty + 1
+    txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";blue"
+    contents = txt.split("\n");
+    for cont in contents:
+            EncodeWebSockSend(clientsocket, cont)
+
+    #parentx = nodex;
+    #parenty = nodey;
     #clientsocket.send('hello from server')
     print("-----------hello from server sent-------------")
     time.sleep(1)
