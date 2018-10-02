@@ -29,16 +29,30 @@
 						function rand() {
 							  return Math.random();
 						}
-						
+
 						var socket = new WebSocket("ws://localhost:5000");
-						
+						var points = [[-1, -1], [-1, -1], [-1, -1], [-1, -1]];
+						var x1 = [0];
+						var y1 = [0];
+						var x2 = [1];
+						var y2 = [0];
+						var x3 = [2];
+						var y3 = [0];
+						var x4 = [3];
+						var y4 = [0];
 						/* On socket connected */
 						socket.onopen = function() {
 							console.log("socket.on.connection")
-							
-							var trace1 = {x:[1], y:[1], mode: 'markers+lines',
-							type: 'scatter'};
-							var plotdata = [trace1];
+
+							var trace1 = {x:[0], y:[0], mode: 'markers+lines',
+							type: 'scatter', marker: {color: 'black', size: 4}};
+							var trace2 = {x:[1], y:[0], mode: 'markers+lines',
+							type: 'scatter', marker: {color: 'black', size: 4}};
+							var trace3 = {x:[2], y:[0], mode: 'markers+lines',
+							type: 'scatter', marker: {color: 'black', size: 4}};
+							var trace4 = {x:[3], y:[0], mode: 'markers+lines',
+							type: 'scatter', marker: {color: 'black', size: 4}};
+							var plotdata = [trace1, trace2, trace3, trace4];
 
 							Plotly.plot('chart', plotdata);
 
@@ -61,16 +75,48 @@
 							console.log(nodex);
 							var nodey = parseInt(data[3], 10);
 							console.log(nodey);
-							
-							var trace1 = {x:[nodex], y:[nodey],
-								mode:'markers+lines', type: 'scatter'};
+							var color = (data[3]);
+							var rgb;
+							if (color == "blue") {
+								rgb = 'rgb(244, 66, 212)';
+							}
 
-							// var trace2 = {x:[nodex], y:[nodey], 
+							// get index
+							/*for (i = 0; i < points.length; i++) {
+								var x = points[i][0];
+								var y = points[i][1];
+								if (parentx == x && parenty == y) {
+									traceIndex = i;
+									points[i][0] = nodex;
+									points[i][1] = nodey;
+									break;
+								}
+							}
+
+							if (index == 0) {
+								x1.push(nodex);
+								y1.push(nodey);
+							} else if (index == 1) {
+								x2.push(nodex);
+								y2.push(nodey);
+							} else if (index == 2) {
+								x3.push(nodex);
+								y3.push(nodey);
+							} else if (index == 3) {
+								x4.push(nodex);
+								y4.push(nodey);
+							}*/
+
+							console.log(rgb);
+							var trace1 = {x:[nodex], y:[nodey],
+								mode:'markers+lines', type: 'scatter', color:rgb};
+
+							// var trace2 = {x:[nodex], y:[nodey],
 							//	mode: 'lines',
 							//type: 'scatter'};
 
 							var plotdata = [trace1];
-							
+
 							//graphing
 							var myPlot = document.getElementById('chart'),
 							layout = {
@@ -94,15 +140,43 @@
 								}
 							};
 
+							var traceIndex = -1;
+							for (i = 0; i < points.length; i++) {
+								var x = points[i][0];
+								var y = points[i][1];
+								if (parentx == x && parenty == y) {
+									traceIndex = i;
+									points[i][0] = nodex;
+									points[i][1] = nodey;
+									break;
+								}
+							}
+
+							if (traceIndex == -1) {
+								for (i = 0; i < points.length; i++) {
+									var x = points[i][0];
+									var y = points[i][1];
+									if (x == -1 && y == -1) {
+										points[i][0] = nodex;
+										points[i][1] = nodey;
+										break;
+									}
+								}
+							}
+
 							var update = {
 								x: [[nodex]],
 								    y: [[nodey]]
 							};
 
+							var update2 = {
+								x: [x1, x2, x3, x4],
+								    y: [y1, y2, y3, y4]
+							};
 							//data = [ { x: [0,1,2,3,4,5,6], y:[temp],
 							//	type:'scatter'} ],
-							Plotly.extendTraces(myPlot, update, [0]);
-
+							Plotly.extendTraces(myPlot, update, [traceIndex]);
+							Plotly.plot(myPlot, update2, [[0], [1], [2], [3]])
 						};// end on message
 
 						/*const net  = require('net');
@@ -129,19 +203,19 @@
 						// Create the server, give it our callback handler and listen at the path
 						() => net.createServer(handler).listen(socketPath)
 						);*/
-						
+
 						/*var socket = io.connect("http://localhost:5000");
 
-						console.log("connected");	
-						
-			
+						console.log("connected");
+
+
 						socket.on('connection', function(createplot) {
 													}); //end socket.on connection
 
 						socket.on('temp', function(temp){
-							
+
 							});*/ // end socket.on temp
-							
+
 							//OLD
 							//var graphs = {{ graphJSON | safe}};
 							//Plotly.plot('chart',graphs,{});
