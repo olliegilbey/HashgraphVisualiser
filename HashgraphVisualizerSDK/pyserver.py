@@ -91,7 +91,28 @@ print clientsocket.recv(1024)
 
 #parentx = 1
 #parenty = 0
+
+#TEMPORARY CODE USED TO GENERATE PREDICTABLE OUTPUT COORDINATES
+node1 = [0, 0]
+node2 = [1, 0]
+node3 = [2, 0]
+node4 = [3, 0]
+nodes = [node1, node2, node3, node4]
+t = 0
+##########
+
 while 1:
+    #TEMPORARY CODE USED TO GENERATE PREDICTABLE OUTPUT COORDINATES
+    randNode = random.randint(0,3)
+    randDest = random.randint(0,3)
+    t = t + 1
+    dest = [randDest, t]
+    out = str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";"
+    nodes[randNode] = dest
+    out = out + str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";blue"
+    print(out)
+    ###############
+        
     #nodex = random.randint(1,5)
     #nodey = parenty + 1
     txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";blue"
