@@ -92,7 +92,7 @@
 							console.log(nodex);
 							var nodey = parseInt(data[3], 10);
 							console.log(nodey);
-							var myconsensus = parseInt(data[3], 10);
+							var myconsensus = parseInt(data[4], 10);
 
 							if (myconsensus == 1) {
 								consensusX.push(nodex);
@@ -145,8 +145,6 @@
 							var myPlot = document.getElementById('chart');
 							
 							// Create four original traces 
-							var wernich = 20;
-							
 							var trace1 = {
 								x: x1, y: y1, mode: 'markers+lines',
 								type: 'scatter', marker: {color: 'black', size: 4}
