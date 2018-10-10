@@ -104,7 +104,7 @@ while 1:
     randDest = random.randint(0,3)
     randCons = random.randint(0,10)
     cons = 0
-    if randCons >= 5:
+    if randCons >= 7:
         cons = 1
     t = t + 1
     dest = [randDest, t]
@@ -120,7 +120,7 @@ while 1:
 #while 1:
     #nodex = random.randint(1,5)
     #nodey = parenty + 1
-    # txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";blue"
+    # txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";1"
     #contents = txt.split("\n");
     #for cont in contents:
     #        EncodeWebSockSend(clientsocket, cont)
