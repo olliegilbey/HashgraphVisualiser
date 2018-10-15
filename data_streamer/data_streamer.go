@@ -7,21 +7,9 @@ import (
 	"net"
 	"net/http"
 	"strconv"
-	"time"
 )
 
-type event struct {
-	IsFamous  bool
-	IsWitness bool
-	Parents   []string
-	Timestamp time.Time
-}
-
-type round struct {
-	Number int
-	Events map[string]event
-}
-
+// json structs
 type jsonRound struct {
 	Events map[string]jsonRoundEvent
 }
@@ -45,11 +33,172 @@ type jsonEventBody struct {
 	BlockSignatures []string
 }
 
+// visualizer structs
+type event struct {
+	x         int
+	y         int
+	isFamous  bool
+	isWitness bool
+	jsonData  jsonEvent
+}
+
+type line struct {
+	x1    int
+	y1    int
+	x2    int
+	y2    int
+	color string
+}
+
+var events = make(map[string]event)          // map of events
+var lines = make(map[string]map[string]line) // line that exist between any two events
+
+const famousColor = "green"
+const witnessColor = "blue"
+const famousWitnessColor = "red"
+const defaultColor = "black"
+const nodeNumber = 3
+
 func main() {
 
-	var participants []string
-	var currentRound round
-	var consensusEvents []string
+	var currentRoundNumber = 0
+	var currX = 0
+	var maxY = 0
+
+	// handle the network socket
+	var channel = make(chan string)
+	go handleChannel(channel)
+
+	for {
+
+		var lastRound = 0
+		json.Unmarshal(getData("http://localhost:8001/lastround"), &lastRound)
+
+		// get events up to current round
+		for ; currentRoundNumber <= lastRound; currentRoundNumber++ {
+			fmt.Println("processing round " + strconv.Itoa(currentRoundNumber))
+
+			channel <- "round:" + strconv.Itoa(currentRoundNumber) + "," + strconv.Itoa(maxY)
+
+			// populate events map with new events
+			for i := 1; i < nodeNumber; i++ {
+				var currentRoundJson jsonRound
+				json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/round/"+strconv.Itoa(currentRoundNumber)), &currentRoundJson)
+				for key, value := range currentRoundJson.Events {
+					if _, ok := events[key]; ok {
+						continue // we already have this node
+					}
+					var newEvent event
+					if value.Famous > 0 {
+						newEvent.isFamous = true
+					} else {
+						newEvent.isFamous = false
+					}
+					if value.Witness == true {
+						newEvent.isWitness = true
+					} else {
+						newEvent.isWitness = false
+					}
+					var eventData jsonEvent
+					json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/event/"+string(key)), &eventData)
+					newEvent.jsonData = eventData
+					if eventData.Body.Parents[0] == "" {
+						currX += 1
+						newEvent.x = currX
+						newEvent.y = 0
+					}
+					events[key] = newEvent
+				}
+			}
+
+			// populates event x's and y's
+			for key := range events {
+				x, y := findEventXY(key, events)
+				if maxY < y {
+					maxY = y
+				}
+				e := events[key]
+				e.x = x
+				e.y = y
+				events[key] = e
+			}
+
+			// populates lines matrix with line data
+			for key, event := range events {
+				var selfParent = events[key].jsonData.Body.Parents[0]
+				var otherParent = events[key].jsonData.Body.Parents[1]
+				if selfParent == "" {
+					continue
+				}
+				var color string
+				if event.isWitness && event.isFamous {
+					color = famousWitnessColor
+				} else if event.isWitness {
+					color = witnessColor
+				} else if event.isFamous {
+					color = famousColor
+				} else {
+					color = defaultColor
+				}
+				// line data
+				var selfParentLine line
+				selfParentLine.x1 = events[selfParent].x
+				selfParentLine.y1 = events[selfParent].y
+				selfParentLine.x2 = event.x
+				selfParentLine.y2 = event.y
+				selfParentLine.color = color
+				if lines[selfParent] == nil {
+					lines[selfParent] = make(map[string]line)
+				}
+				// add to map and output to channel
+				lines[selfParent][key] = selfParentLine
+				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," + selfParentLine.color
+				var otherParentLine line
+				otherParentLine.x1 = events[otherParent].x
+				otherParentLine.y1 = events[otherParent].y
+				otherParentLine.x2 = event.x
+				otherParentLine.y2 = event.y
+				otherParentLine.color = color
+				if lines[otherParent] == nil {
+					lines[otherParent] = make(map[string]line)
+				}
+				// add to map and output to channel
+				lines[otherParent][key] = otherParentLine
+				channel <- "line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," + otherParentLine.color
+			}
+		}
+	}
+}
+
+func getData(url string) []byte {
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err)
+	}
+	return respBody
+}
+
+func findEventXY(key string, events map[string]event) (int, int) {
+	selfParent := events[key].jsonData.Body.Parents[0]
+	if selfParent == "" {
+		return events[key].x, events[key].y
+	}
+	if events[selfParent].x > 0 {
+		return events[selfParent].x, events[selfParent].y + 1
+	}
+	x, y := findEventXY(selfParent, events)
+	return x, y + 1
+}
+
+func handleChannel(channel chan string) {
+
 	var output net.Conn
 
 	// wait for listen socket connection
@@ -63,92 +212,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	// get graph participants and output
-	var participantJson map[string]int
-	json.Unmarshal(getData("http://localhost:8001/participants"), &participantJson)
-	for key := range participantJson {
-		participants = append(participants, key)
-	}
-	data, err := json.Marshal(participants)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("write participants")
-	output.Write(data)
-	output.Read(make([]byte, 2))
-
-	// constantly get next round of events and output
-	var currentRoundNumber int
-	var prevRoundNumber int
-	prevRoundNumber = -1
 	for {
-
-		// check if next round available, and if so continue
-		for {
-			json.Unmarshal(getData("http://localhost:8001/lastround"), &currentRoundNumber)
-			currentRound.Number = currentRoundNumber
-			currentRound.Events = make(map[string]event)
-			if currentRoundNumber != prevRoundNumber {
-				break
-			}
-		}
-		prevRoundNumber = currentRoundNumber
-
-		// populate currentRound.events
-		var currentRoundJson jsonRound
-		json.Unmarshal(getData("http://localhost:8001/round/"+strconv.Itoa(currentRoundNumber)), &currentRoundJson)
-		for key, value := range currentRoundJson.Events {
-			var newEvent event
-			if value.Famous > 0 {
-				newEvent.IsFamous = true
-			} else {
-				newEvent.IsFamous = false
-			}
-			if value.Witness == true {
-				newEvent.IsWitness = true
-			} else {
-				newEvent.IsWitness = false
-			}
-			var eventData jsonEvent
-			json.Unmarshal(getData("http://localhost:8001/event/"+string(key)), &eventData)
-			newEvent.Parents = make([]string, 2)
-			newEvent.Parents[0] = eventData.Body.Parents[0]
-			newEvent.Parents[1] = eventData.Body.Parents[1]
-			newEvent.Timestamp, _ = time.Parse(time.RFC3339Nano, eventData.Body.Timestamp)
-			currentRound.Events[key] = newEvent
-		}
-
-		// populate consensusEvents
-		json.Unmarshal(getData("http://localhost:8001/consensusevents"), &consensusEvents)
-
-		// output
-		data, err := json.Marshal(currentRound)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("write current round")
-		output.Write(data)
-		output.Read(make([]byte, 2))
-		data, err = json.Marshal(consensusEvents)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("write consensus events")
-		output.Write(data)
-		output.Read(make([]byte, 2))
+		output.Write([]byte(<-channel + "\n"))
 	}
-
-}
-
-func getData(url string) []byte {
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Print(err)
-	}
-	defer resp.Body.Close()
-	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Print(err)
-	}
-	return respBody
 }

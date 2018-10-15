@@ -1,44 +1,207 @@
 <!doctype html>
 
 <html>
-<head>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
-	<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-</head>
-<body>
-	<div class="main">
-		<center>
-			<h1>
-				Hashgraph Visualiser
-			</h1>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+		<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+	</head>
+	<body>
+		<div class="main">
+			<center>
+				<h1>
+					Hashgraph Visualiser
+				</h1>
 
-			<div id="chart" class="chart">
+				<div id="chart" class="chart">
 
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-				<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-				<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
-				<script type="text/javascript">
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+					<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+					<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+					<script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+					<script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/web-socket-js/1.0.0/web_socket.min.js"></script>
+					<script type="text/javascript">
+						//@see https://community.plot.ly/t/live-streaming-
+						// data-using-javascript/1645
+						function rand() {
+							  return Math.random();
+						}
 
-				var graphs = {{ graphJSON | safe}};
-				Plotly.plot('chart',graphs,{});
-				</script>
+						var socket = new WebSocket("ws://localhost:5000");
+						var points = [[0, 0], [1, 0], [2, 0], [3, 0]];
+						var consensusX = [];
+						var consensusY = [];
 
-			</div>
-			<div class="button">
-				<form method="post" action="/test" onsubmit="this.form.submit(); return false">
-					<input id="button" type="submit" name="Stop" value="Stop">
-					<input id="button" type="submit" name="Start" value="Start">
-					<div class="slider">
-						<label for="rangeinput">Number of Nodes</label>
-						<input id="rangeinput" name="slider" type="range" min="1" max="10" value="{{SliderVal}}" onchange="rangevalue.value=value; this.form.submit()"></input>
-						<output type="text" id="rangevalue" onchange="rangeinput.value=value">{{SliderVal}}</output>
+						var x1 = [0];
+						var y1 = [0];
+						var x2 = [1];
+						var y2 = [0];
+						var x3 = [2];
+						var y3 = [0];
+						var x4 = [3];
+						var y4 = [0];
+						
+						socket.onopen = function() {
+							/* On socket connected */
+							console.log("socket.on.connection")
+							
+							/* Create four original traces */
+							var trace1 = {
+								x:[0], y:[0], mode: 'markers+lines',
+								type: 'scatter',marker: {color: 'black', size: 4}
+							};
+							var trace2 = {
+								x:[1], y:[0], mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace3 = {
+								x:[2], y:[0], mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace4 = {
+								x:[3], y:[0], mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+
+							/* Create the plot */
+							var plotdata = [trace1, trace2, trace3, trace4];
+							Plotly.plot('chart', plotdata);
+
+							console.log("Web Socket is open. sending msg");
+							
+							/* Tell the server I am alive */
+							socket.send("hello from client");
+						};
+
+						socket.onmessage = function(s) {
+							// Message received
+							console.log("received msg");
+							console.log(s.data);
+
+							var t = s.data;
+
+							var data = t.split(";");
+							var parentx = parseInt(data[0], 10);
+							console.log(parentx);
+							var parenty = parseInt(data[1], 10);
+							console.log(parenty);
+							var nodex = parseInt(data[2], 10);
+							console.log(nodex);
+							var nodey = parseInt(data[3], 10);
+							console.log(nodey);
+							var myconsensus = parseInt(data[3], 10);
+
+							if (myconsensus == 1) {
+								consensusX.push(nodex);
+								consensusY.push(nodey);
+							}
+
+							// get index
+							var index = -1;
+
+							for (i = 0; i < points.length; i++) {
+								var x = points[i][0];
+								var y = points[i][1];
+								if (parentx == x && parenty == y) {
+									index = i;
+									points[i][0] = nodex;
+									points[i][1] = nodey;
+									break;
+								}
+							}
+
+							if (index == 0) {
+								x1.push(nodex);
+								y1.push(nodey);
+								console.log(x1);
+								console.log(y1);
+							} else if (index == 1) {
+								x2.push(nodex);
+								y2.push(nodey);
+								console.log(x2);
+								console.log(y2);
+							} else if (index == 2) {
+								x3.push(nodex);
+								y3.push(nodey);
+								console.log(x3);
+								console.log(y3);
+							} else if (index == 3) {
+								x4.push(nodex);
+								y4.push(nodey);
+								console.log(x4);
+								console.log(y4);
+							} else {
+								console.log("No matching index found");
+							}
+
+							//var trace2 = {x:[x1, x2, x3, x4], y:[y1, y2, y3, y4],
+							//	mode: 'lines+markers',
+							//type: 'scatter'};
+
+							//graphing
+							var myPlot = document.getElementById('chart');
+							
+							// Create four original traces 
+							var wernich = 20;
+							
+							var trace1 = {
+								x: x1, y: y1, mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace2 = {
+								x: x2, y: y2, mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace3 = {
+								x: x3, y: y3, mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace4 = {
+								x: x4, y: y4, mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'black', size: 4}
+							};
+							var trace5 = {
+								x: [parentx, nodex], y: [parenty, nodey], mode: 'markers+lines',
+								type: 'scatter', marker: {color: 'yellow', size: 4}
+							};
+							var trace6 = {
+								x: consensusX, y: consensusY, mode: 'markers',
+								type: 'scatter', marker: {color: 'red', size: 10}
+							};
+							
+							/* Create the plot */
+							var plotdata = [trace1, trace2, trace3, trace4, trace5, trace6];
+							Plotly.newPlot('chart', plotdata);
+
+							
+							// data = [ { x: [0,1,2,3,4,5,6], y:[temp],
+							// 	type:'scatter'} ],
+							// Plotly.extendTraces(myPlot, update, [traceIndex]);
+							// Plotly.plot(myPlot, [trace2], [[0], [1], [2], [3]])
+						};// end on message
+
+							//OLD
+							//var graphs = {{ graphJSON | safe}};
+							//Plotly.plot('chart',graphs,{});
+						</script>
+
 					</div>
-				</form>
-			</div>
+					<div class="button">
+						<form method="post" action="/test" onsubmit="this.form.submit(); return false">
+							<input id="button" type="submit" name="Stop" value="Stop">
+							<input id="button" type="submit" name="Start" value="Start">
+							<div class="slider">
+								<label for="rangeinput">Number of Nodes</label>
+								<input id="rangeinput" name="slider" type="range" min="1" max="10" value="{{SliderVal}}" onchange="rangevalue.value=value; this.form.submit()"></input>
+								<output type="text" id="rangevalue" onchange="rangeinput.value=value">{{SliderVal}}</output>
+							</div>
+						</form>
+					</div>
 
-		</center>
-	</div>
-</body>
-</html>
+				</center>
+			</div>
+		</body>
+	</html>
