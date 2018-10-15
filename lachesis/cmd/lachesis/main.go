@@ -97,6 +97,7 @@ var (
 )
 
 func main() {
+	fmt.Println("Local Lachesis")
 	app := cli.NewApp()
 	app.Name = "Lachesis"
 	app.Usage = "hashgraph consensus"

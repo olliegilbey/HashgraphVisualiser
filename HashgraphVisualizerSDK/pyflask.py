@@ -10,5 +10,4 @@ def hello():
     return render_template('untitled.html', SliderVal = 4, name =
             'Live Visualizer', graphJSON = "")
 
-
 app.run(host='0.0.0.0', port=5001)

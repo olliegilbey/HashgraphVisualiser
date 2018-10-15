@@ -485,7 +485,8 @@ func (n *Node) sync(events []hg.WireEvent) error {
 	start = time.Now()
 	err = n.core.RunConsensus()
 	elapsed = time.Since(start)
-	n.logger.WithField("duration", elapsed.Nanoseconds()).Debug("Processed RunConsensus()")
+	n.logger.WithField("duration", elapsed.Nanoseconds()).Debug("Processed RunConsensus1()")
+	n.logger.WithField("duration", elapsed.Nanoseconds()).Debug("Local Lachesis")
 	if err != nil {
 		return err
 	}

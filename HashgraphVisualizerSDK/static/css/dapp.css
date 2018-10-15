@@ -1,0 +1,75 @@
+body {
+	font-family: Ubuntu, "times new roman", times, roman, serif;
+	background-color: #303030;
+	color: #A0A0A0;
+	margin: 0;
+}
+
+h1 {
+	color: #fff;
+	background-color: black;
+	font-size: 50pt;
+	padding: 30px;
+	max-width: 80%;
+	margin-bottom: 0px;
+}
+
+#chart {
+	background-color: #303030;
+	margin: 0;
+	text-align: center;
+	max-width: 80%;
+	padding-bottom: 0;
+}
+
+
+#main {
+	margin: 30px;
+	text-align: center;
+	max-width: 80%;
+	color: #000;
+	padding-top:0;
+
+}
+
+.button{
+	width: 100%;
+	background-color: #303030;
+	padding: 0;
+	margin: 0;
+
+}
+
+.slider{
+	background-color: #303030;
+	width: 80%;
+	margin: 30px;
+	margin-top: 0;
+	height: 4em;
+}
+
+label,output {
+	padding: 5px;
+	font-size: 20px;
+}
+
+input[type=submit]{
+	transition-duration: 0.4s;
+	background-color: #f32e1b !important;
+	padding: 0px;
+	margin: 0;
+	border: none;
+	background: none;
+	color: #fff;
+	width: 50%;
+	height: 3.2em;
+	float:left;
+	box-shadow: 7px 10px 8px #222;
+	font-size: 20px;
+
+}
+
+input[type=submit]:hover {
+	color: white !important;
+	background-color: #ef6a5e !important;
+}
