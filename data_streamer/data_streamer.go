@@ -35,11 +35,12 @@ type jsonEventBody struct {
 
 // visualizer structs
 type event struct {
-	x         int
-	y         int
-	isFamous  bool
-	isWitness bool
-	jsonData  jsonEvent
+	x           int
+	y           int
+	isFamous    bool
+	isWitness   bool
+	isConsensus bool
+	jsonData    jsonEvent
 }
 
 type line struct {
@@ -99,6 +100,7 @@ func main() {
 					} else {
 						newEvent.isWitness = false
 					}
+					// get event data and check if root node
 					var eventData jsonEvent
 					json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/event/"+string(key)), &eventData)
 					newEvent.jsonData = eventData
@@ -109,6 +111,15 @@ func main() {
 					}
 					events[key] = newEvent
 				}
+			}
+
+			// get consensus events and update graph
+			var consensusEvents []string
+			json.Unmarshal(getData("http://localhost:8001/consensusevents"), &consensusEvents)
+			for _, evId := range consensusEvents {
+				var ev = events[evId]
+				ev.isConsensus = true
+				events[evId] = ev
 			}
 
 			// populates event x's and y's
@@ -141,6 +152,12 @@ func main() {
 					color = defaultColor
 				}
 				// line data
+				// if consensus or not
+				var consensusInt = 0
+				if event.isConsensus {
+					consensusInt = 1
+				}
+				// self parent line
 				var selfParentLine line
 				selfParentLine.x1 = events[selfParent].x
 				selfParentLine.y1 = events[selfParent].y
@@ -153,7 +170,9 @@ func main() {
 				// add to map and output to channel
 				lines[selfParent][key] = selfParentLine
 				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
-					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," + selfParentLine.color
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					selfParentLine.color + "," + strconv.Itoa(consensusInt)
+				// other parent line
 				var otherParentLine line
 				otherParentLine.x1 = events[otherParent].x
 				otherParentLine.y1 = events[otherParent].y
