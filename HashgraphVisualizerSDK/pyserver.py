@@ -22,9 +22,9 @@ websocket_answer = (
 GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-awshost = "localhost"
-awsport = 3333
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+awshost = "18.222.162.68"
+awsport = 2738
 host = "127.0.0.1"
 port = 5000
 
@@ -34,7 +34,7 @@ print (port)
 #client.send(b'python connected')
 serversocket.bind((host, port))
 serversocket.listen(5)
-#socket.connect((awshost, awsport))
+socket.connect((awshost, awsport))
 
 print("socket listening")
 
@@ -90,54 +90,39 @@ print("------------Received from Client: ---------------")
 print clientsocket.recv(1024)
 
 #TEMPORARY CODE USED TO GENERATE PREDICTABLE OUTPUT COORDINATES
-node1 = [0, 0]
-node2 = [1, 0]
-node3 = [2, 0]
-node4 = [3, 0]
-nodes = [node1, node2, node3, node4]
-t = 0
+#node1 = [0, 0]
+#node2 = [1, 0]
+#node3 = [2, 0]
+#node4 = [3, 0]
+#nodes = [node1, node2, node3, node4]
+#t = 0
 ##########
 
-while 1:
-    #TEMPORARY CODE USED TO GENERATE PREDICTABLE OUTPUT COORDINATES
-    randNode = random.randint(0,3)
-    randDest = random.randint(0,3)
-    randCons = random.randint(0,10)
-    cons = 0
-    if randCons >= 7:
-        cons = 1
-    t = t + 1
-    dest = [randDest, t]
-    out = str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";"
-    nodes[randNode] = dest
-    out = out + str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";" + str(cons)
-    print(out)
-###############
-    EncodeWebSockSend(clientsocket, out)
-
-#parentx = 1
-#parenty = 0
 #while 1:
-    #nodex = random.randint(1,5)
-    #nodey = parenty + 1
-    # txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";1"
-    #contents = txt.split("\n");
-    #for cont in contents:
-    #        EncodeWebSockSend(clientsocket, cont)
-    #parentx = nodex;
-    #parenty = nodey;
+    #TEMPORARY CODE USED TO GENERATE PREDICTABLE OUTPUT COORDINATES
+#    randNode = random.randint(0,3)
+#    randDest = random.randint(0,3)
+#    randCons = random.randint(0,10)
+#    cons = 0
+#    if randCons >= 7:
+#        cons = 1
+#    t = t + 1
+#    dest = [randDest, t]
+#    out = str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";"
+#    nodes[randNode] = dest
+#    out = out + str(nodes[randNode][0]) + ";" + str(nodes[randNode][1]) + ";" + str(cons)
+#    print(out)
+#    EncodeWebSockSend(clientsocket, out)
+###############
+
+while 1:
+    txt = socket.recv(2048) #"" + str(parentx) + ";" + str(parenty) + ";" + str(nodex) + ";"+str(nodey)+";1"
+    print txt;
+    contents = txt.split("\n");
+    for cont in contents:
+            EncodeWebSockSend(clientsocket, cont)
     #clientsocket.send('hello from server')
     print("-----------hello from server sent-------------")
-    time.sleep(1)
-#while 1:
-    #print("running")
-    #now do something with the clientsocket
-    #in this case, we'll pretend this is a threaded server
-#    serversocket.send(b'Something sent')
-    #client.send('some message')
-    #serversocket.emit('connection')
-    #serversocket.flush()
-#    print('something sent')
+    time.sleep(0.5)
 
-#client.close()
 print("done")
