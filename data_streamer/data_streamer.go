@@ -202,7 +202,7 @@ func handleChannel(channel chan string) {
 	var output net.Conn
 
 	// wait for listen socket connection
-	l, err := net.Listen("tcp", "localhost:3333")
+	l, err := net.Listen("tcp", ":2738")
 	if err != nil {
 		fmt.Println(err)
 	}
