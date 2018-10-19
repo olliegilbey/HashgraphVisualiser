@@ -124,17 +124,16 @@ func main() {
 
 			// populates event x's and y's
 			for key := range events {
-				if (events[key].x > 0) {
-					continue
+				if (events[key].x == 0) {
+					x, y := findEventXY(key, events)
+					if maxY < y {
+						maxY = y
+					}
+					e := events[key]
+					e.x = x
+					e.y = y
+					events[key] = e
 				}
-				x, y := findEventXY(key, events)
-				if maxY < y {
-					maxY = y
-				}
-				e := events[key]
-				e.x = x
-				e.y = y
-				events[key] = e
 			}
 
 			// populates lines matrix with line data
@@ -165,7 +164,7 @@ func main() {
 				selfParentLine.x1 = events[selfParent].x
 				selfParentLine.y1 = events[selfParent].y
 				selfParentLine.x2 = event.x
-				selfParentLine.y2 = event.y
+				selfParentLine.y2 = event.y + 1
 				selfParentLine.color = color
 				if lines[selfParent] == nil {
 					lines[selfParent] = make(map[string]line)
@@ -183,7 +182,7 @@ func main() {
 				otherParentLine.x1 = events[otherParent].x
 				otherParentLine.y1 = events[otherParent].y
 				otherParentLine.x2 = event.x
-				otherParentLine.y2 = event.y
+				otherParentLine.y2 = event.y + 1
 				otherParentLine.color = color
 				if lines[otherParent] == nil {
 					lines[otherParent] = make(map[string]line)
