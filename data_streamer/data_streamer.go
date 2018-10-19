@@ -214,9 +214,9 @@ func getData(url string) []byte {
 
 func findEventXY(key string, events map[string]event) (int, int) {
 	ev := events[key]
-	selfParent := ev.jsonData.Body.Parents[0]
+	selfParent := ev.jsonData.Body.Parents[1]
 	if selfParent == "" {
-		return events[key].x, events[key].y
+		return ev.x, ev.y
 	}
 	if events[selfParent].x > 0 {
 		return events[selfParent].x, events[selfParent].y + 1
