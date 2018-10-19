@@ -124,6 +124,9 @@ func main() {
 
 			// populates event x's and y's
 			for key := range events {
+				if (events[key].x > 0) {
+					continue
+				}
 				x, y := findEventXY(key, events)
 				if maxY < y {
 					maxY = y
@@ -214,7 +217,7 @@ func getData(url string) []byte {
 
 func findEventXY(key string, events map[string]event) (int, int) {
 	ev := events[key]
-	selfParent := ev.jsonData.Body.Parents[1]
+	selfParent := ev.jsonData.Body.Parents[0]
 	if selfParent == "" {
 		return ev.x, ev.y
 	}
