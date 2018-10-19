@@ -82,7 +82,7 @@ func main() {
 			channel <- "round:" + strconv.Itoa(currentRoundNumber) + "," + strconv.Itoa(maxY)
 
 			// populate events map with new events
-			for i := 1; i < nodeNumber; i++ {
+			for i := 1; i <= nodeNumber; i++ {
 				var currentRoundJson jsonRound
 				json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/round/"+strconv.Itoa(currentRoundNumber)), &currentRoundJson)
 				for key, value := range currentRoundJson.Events {
@@ -172,6 +172,9 @@ func main() {
 				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
 					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," +
 					selfParentLine.color + "," + strconv.Itoa(consensusInt)
+				fmt.Println("line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					selfParentLine.color + "," + strconv.Itoa(consensusInt))
 				// other parent line
 				var otherParentLine line
 				otherParentLine.x1 = events[otherParent].x
@@ -185,7 +188,12 @@ func main() {
 				// add to map and output to channel
 				lines[otherParent][key] = otherParentLine
 				channel <- "line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
-					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," + otherParentLine.color
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					otherParentLine.color + "," + strconv.Itoa(consensusInt)
+				fmt.Println("line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					otherParentLine.color + "," + strconv.Itoa(consensusInt))
+
 			}
 		}
 	}
