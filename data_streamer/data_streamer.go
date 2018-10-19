@@ -164,7 +164,7 @@ func main() {
 				selfParentLine.x1 = events[selfParent].x
 				selfParentLine.y1 = events[selfParent].y
 				selfParentLine.x2 = event.x
-				selfParentLine.y2 = event.y + 1
+				selfParentLine.y2 = event.y
 				selfParentLine.color = color
 				if lines[selfParent] == nil {
 					lines[selfParent] = make(map[string]line)
@@ -172,17 +172,17 @@ func main() {
 				// add to map and output to channel
 				lines[selfParent][key] = selfParentLine
 				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
-					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
 					selfParentLine.color + "," + strconv.Itoa(consensusInt)
 				fmt.Println("line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
-					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
 					selfParentLine.color + "," + strconv.Itoa(consensusInt))
 				// other parent line
 				var otherParentLine line
 				otherParentLine.x1 = events[otherParent].x
 				otherParentLine.y1 = events[otherParent].y
 				otherParentLine.x2 = event.x
-				otherParentLine.y2 = event.y + 1
+				otherParentLine.y2 = event.y
 				otherParentLine.color = color
 				if lines[otherParent] == nil {
 					lines[otherParent] = make(map[string]line)
@@ -190,10 +190,10 @@ func main() {
 				// add to map and output to channel
 				lines[otherParent][key] = otherParentLine
 				channel <- "line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
-					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
 					otherParentLine.color + "," + strconv.Itoa(consensusInt)
 				fmt.Println("line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
-					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
 					otherParentLine.color + "," + strconv.Itoa(consensusInt))
 
 			}
