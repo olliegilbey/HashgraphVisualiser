@@ -35,11 +35,12 @@ type jsonEventBody struct {
 
 // visualizer structs
 type event struct {
-	x         int
-	y         int
-	isFamous  bool
-	isWitness bool
-	jsonData  jsonEvent
+	x           int
+	y           int
+	isFamous    bool
+	isWitness   bool
+	isConsensus bool
+	jsonData    jsonEvent
 }
 
 type line struct {
@@ -81,7 +82,7 @@ func main() {
 			channel <- "round:" + strconv.Itoa(currentRoundNumber) + "," + strconv.Itoa(maxY)
 
 			// populate events map with new events
-			for i := 1; i < nodeNumber; i++ {
+			for i := 1; i <= nodeNumber; i++ {
 				var currentRoundJson jsonRound
 				json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/round/"+strconv.Itoa(currentRoundNumber)), &currentRoundJson)
 				for key, value := range currentRoundJson.Events {
@@ -99,6 +100,7 @@ func main() {
 					} else {
 						newEvent.isWitness = false
 					}
+					// get event data and check if root node
 					var eventData jsonEvent
 					json.Unmarshal(getData("http://localhost:800"+strconv.Itoa(i)+"/event/"+string(key)), &eventData)
 					newEvent.jsonData = eventData
@@ -111,16 +113,27 @@ func main() {
 				}
 			}
 
+			// get consensus events and update graph
+			var consensusEvents []string
+			json.Unmarshal(getData("http://localhost:8001/consensusevents"), &consensusEvents)
+			for _, evId := range consensusEvents {
+				var ev = events[evId]
+				ev.isConsensus = true
+				events[evId] = ev
+			}
+
 			// populates event x's and y's
 			for key := range events {
-				x, y := findEventXY(key, events)
-				if maxY < y {
-					maxY = y
+				if (events[key].x == 0) {
+					x, y := findEventXY(key, events)
+					if maxY < y {
+						maxY = y
+					}
+					e := events[key]
+					e.x = x
+					e.y = y
+					events[key] = e
 				}
-				e := events[key]
-				e.x = x
-				e.y = y
-				events[key] = e
 			}
 
 			// populates lines matrix with line data
@@ -141,6 +154,12 @@ func main() {
 					color = defaultColor
 				}
 				// line data
+				// if consensus or not
+				var consensusInt = 0
+				if event.isConsensus {
+					consensusInt = 1
+				}
+				// self parent line
 				var selfParentLine line
 				selfParentLine.x1 = events[selfParent].x
 				selfParentLine.y1 = events[selfParent].y
@@ -153,7 +172,12 @@ func main() {
 				// add to map and output to channel
 				lines[selfParent][key] = selfParentLine
 				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
-					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y1) + "," + selfParentLine.color
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
+					selfParentLine.color + "," + strconv.Itoa(consensusInt)
+				fmt.Println("line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
+					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
+					selfParentLine.color + "," + strconv.Itoa(consensusInt))
+				// other parent line
 				var otherParentLine line
 				otherParentLine.x1 = events[otherParent].x
 				otherParentLine.y1 = events[otherParent].y
@@ -166,7 +190,12 @@ func main() {
 				// add to map and output to channel
 				lines[otherParent][key] = otherParentLine
 				channel <- "line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
-					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y1) + "," + otherParentLine.color
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
+					otherParentLine.color + "," + strconv.Itoa(consensusInt)
+				fmt.Println("line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
+					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
+					otherParentLine.color + "," + strconv.Itoa(consensusInt))
+
 			}
 		}
 	}
@@ -186,9 +215,10 @@ func getData(url string) []byte {
 }
 
 func findEventXY(key string, events map[string]event) (int, int) {
-	selfParent := events[key].jsonData.Body.Parents[0]
+	ev := events[key]
+	selfParent := ev.jsonData.Body.Parents[0]
 	if selfParent == "" {
-		return events[key].x, events[key].y
+		return ev.x, ev.y
 	}
 	if events[selfParent].x > 0 {
 		return events[selfParent].x, events[selfParent].y + 1
@@ -202,7 +232,7 @@ func handleChannel(channel chan string) {
 	var output net.Conn
 
 	// wait for listen socket connection
-	l, err := net.Listen("tcp", "localhost:3333")
+	l, err := net.Listen("tcp", ":2738")
 	if err != nil {
 		fmt.Println(err)
 	}

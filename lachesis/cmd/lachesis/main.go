@@ -284,7 +284,12 @@ func run(c *cli.Context) error {
 	serviceServer := service.NewService(serviceAddress, node_, logger)
 	go serviceServer.Serve()
 
-	node_.Run(true)
+	node_.RunAsync(true)
+	for {
+		message := "Hello, world!"
+		prox.SubmitCh() <- []byte(message)
+		time.Sleep(10000000000)
+	}
 
 	return nil
 }
