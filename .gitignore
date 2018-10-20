@@ -1,7 +1,7 @@
 # Compiled class file
 *.class
 *.pyc
-
+*.wsgi
 # Log file
 *.log
 
@@ -41,6 +41,7 @@ hs_err_pid*
 /HashgraphVisualizerSDK/source/StatsDemo/target/
 /HashgraphVisualizerSDK/source/FilesystemDemo/target/
 /HashgraphVisualizerSDK/data/fc_template/
+/HashgraphVisualizerSDK/venv/
 
 # From lachesis .gitignore:
 # IDE
