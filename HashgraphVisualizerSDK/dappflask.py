@@ -1,6 +1,8 @@
+import socket
 from flask import Flask
 app = Flask(__name__)
 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 @app.route("/dapp")
 def dapp():
@@ -11,4 +13,4 @@ def hello_world():
 	return 'Hello, World!'
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5001)
