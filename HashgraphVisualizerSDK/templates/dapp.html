@@ -6,6 +6,8 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
 		<link href="{{ url_for('static', filename='css/dapp.css') }}" rel="stylesheet">
+		<script async="" type="text/javascript" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script type="text/javascript" async="" src="https://www.google.com/cse/cse.js?cx=012971019331610648934:m2tou3_miwy"></script>
 	</head>
 	<body>
 		<div class="main">
@@ -98,6 +100,26 @@
 								<output type="text" id="rangevalue10" onchange="rangeinput10.value=value">{{SliderVal10}}</output>
 							</td>
 							</tr>
+
+							<script>
+								var slideval1 = document.getElementById("id1");
+								var slideval2 = document.getElementById("id2");
+								var slideval3 = document.getElementById("id3");
+								var y = document.getElementById("f");
+								y.innerHTML = slideCol.value;
+
+								slideCol.oninput = function() {
+								    y.innerHTML = this.value;
+								}
+
+								slideSq.oninput = function() {
+								    y.innerHTML = this.value;
+								}
+
+								slidePic.oninput = function() {
+								    y.innerHTML = this.value;
+								}
+							</script>
 
 							</table>
 						<div class="button">
