@@ -11,7 +11,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 def dapp():
 
 	if request.method == 'POST':
-		contract_instance.vote([request.form['slider1'], request.form['slider2'], request.form['slider3']], transact={'from': w3.eth.accounts[0]})
+		contract_instance.vote( [request.form['slider1'], request.form['slider2'], request.form['slider3']] , transact={'from': w3.eth.accounts[0]})
 
 	return render_template('dapp.html', TokenVal = 100, name ='Vote DApp')
 
