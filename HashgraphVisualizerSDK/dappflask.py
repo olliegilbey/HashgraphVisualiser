@@ -15,6 +15,7 @@ def dapp():
 
 	return render_template('dapp.html', TokenVal = 100, name ='Vote DApp')
 
+w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 # deploy the Voting contract to ganache
 contract_instance = deploy()
 
