@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'], SliderVal1 = 0, SliderVal2 = 0, SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0, SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 def dapp():
 
 	if request.method == 'POST':
