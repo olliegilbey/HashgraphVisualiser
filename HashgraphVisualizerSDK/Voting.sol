@@ -1,8 +1,9 @@
 pragma solidity ^0.4.18;
 
 contract Voting {
-  mapping (bytes32 => uint8) public votesReceived;
+
   bytes32[] public candidateList;
+  mapping (bytes32 => uint8) public votesReceived;
 
   constructor(bytes32[] candidateNames) public {
     candidateList = candidateNames;
@@ -13,9 +14,10 @@ contract Voting {
     return votesReceived[candidate];
   }
 
-  function voteForCandidate(bytes32 candidate) public {
-    assert(validCandidate(candidate));
-    votesReceived[candidate] += 1;
+  function vote(uint8[] votes) public {
+    for (uint i = 0; i < candidateList.length; i++) {
+      votesReceived[candidateList[i]] += votes[i];
+    }
   }
 
   function validCandidate(bytes32 candidate) view public returns (bool) {
