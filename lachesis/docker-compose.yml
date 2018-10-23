@@ -3,18 +3,21 @@ services:
         node1:
                 ports:
                         - "8001:8000"
+                        - "6001:6000"
                 environment:
                         - DATADIR=./node_config/node1
                 build: .
         node2:
                 ports:
                         - "8002:8000"
+                        - "6002:6000"
                 environment:
                         - DATADIR=./node_config/node2
                 build: .
         node3:
                 ports:
                         - "8003:8000"
+                        - "6003:6000"
                 environment:
                         - DATADIR=./node_config/node3
                 build: .

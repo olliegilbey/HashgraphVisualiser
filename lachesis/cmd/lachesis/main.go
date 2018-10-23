@@ -286,11 +286,14 @@ func run(c *cli.Context) error {
 	go serviceServer.Serve()
 
 	node_.RunAsync(true)
+
 	for {
 		message := "Hello, world!"
 		prox.SubmitCh() <- []byte(message)
 		time.Sleep(10000000000)
 	}
+	// TODO add socket for receiving transactions from the evm here
+	// remove the for loop above when this is implemented
 
 	return nil
 }
