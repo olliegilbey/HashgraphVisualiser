@@ -27,7 +27,8 @@ def dapp():
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 	SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 
-w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
+#w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
+w3 = Web3(HTTPProvider("http://127.0.0.1:6001"))
 # deploy the Voting contract to ganache
 contract_instance = deploy()
 
