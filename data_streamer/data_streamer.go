@@ -60,11 +60,12 @@ const famousWitnessColor = "red"
 const defaultColor = "black"
 const nodeNumber = 3
 
+var currX = 0
+var maxY = 0
+
 func main() {
 
 	var currentRoundNumber = 0
-	var currX = 0
-	var maxY = 0
 
 	// handle the network socket
 	var channel = make(chan string)
@@ -76,8 +77,7 @@ func main() {
 		json.Unmarshal(getData("http://localhost:8001/lastround"), &lastRound)
 
 		// get events up to current round
-		for ; currentRoundNumber <= lastRound; currentRoundNumber++ {
-			fmt.Println("processing round " + strconv.Itoa(currentRoundNumber))
+		for ; currentRoundNumber < lastRound; currentRoundNumber++ {
 
 			channel <- "round:" + strconv.Itoa(currentRoundNumber) + "," + strconv.Itoa(maxY)
 
@@ -124,8 +124,8 @@ func main() {
 
 			// populates event x's and y's
 			for key := range events {
-				if (events[key].x == 0) {
-					x, y := findEventXY(key, events)
+				if events[key].x == 0 {
+					x, y := findEventXY(key)
 					if maxY < y {
 						maxY = y
 					}
@@ -174,9 +174,6 @@ func main() {
 				channel <- "line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
 					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
 					selfParentLine.color + "," + strconv.Itoa(consensusInt)
-				fmt.Println("line:" + strconv.Itoa(selfParentLine.x1) + "," + strconv.Itoa(selfParentLine.y1) + "," +
-					strconv.Itoa(selfParentLine.x2) + "," + strconv.Itoa(selfParentLine.y2) + "," +
-					selfParentLine.color + "," + strconv.Itoa(consensusInt))
 				// other parent line
 				var otherParentLine line
 				otherParentLine.x1 = events[otherParent].x
@@ -192,10 +189,6 @@ func main() {
 				channel <- "line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
 					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
 					otherParentLine.color + "," + strconv.Itoa(consensusInt)
-				fmt.Println("line:" + strconv.Itoa(otherParentLine.x1) + "," + strconv.Itoa(otherParentLine.y1) + "," +
-					strconv.Itoa(otherParentLine.x2) + "," + strconv.Itoa(otherParentLine.y2) + "," +
-					otherParentLine.color + "," + strconv.Itoa(consensusInt))
-
 			}
 		}
 	}
@@ -214,7 +207,7 @@ func getData(url string) []byte {
 	return respBody
 }
 
-func findEventXY(key string, events map[string]event) (int, int) {
+func findEventXY(key string) (int, int) {
 	ev := events[key]
 	selfParent := ev.jsonData.Body.Parents[0]
 	if selfParent == "" {
@@ -223,7 +216,7 @@ func findEventXY(key string, events map[string]event) (int, int) {
 	if events[selfParent].x > 0 {
 		return events[selfParent].x, events[selfParent].y + 1
 	}
-	x, y := findEventXY(selfParent, events)
+	x, y := findEventXY(selfParent)
 	return x, y + 1
 }
 
