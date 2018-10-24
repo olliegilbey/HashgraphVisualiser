@@ -121,7 +121,7 @@ while 1:
     contents = txt.split("\n");
     for cont in contents:
             EncodeWebSockSend(clientsocket, cont)
-    #clientsocket.send('hello from server')
+   #clientsocket.send('hello from server')
     print("-----------hello from server sent-------------")
     time.sleep(0.5)
 
