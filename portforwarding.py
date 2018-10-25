@@ -7,7 +7,7 @@ serversocket = socket.socket(
 	        socket.AF_INET, socket.SOCK_STREAM) 
 
 # get local machine name
-host = socket.gethostname()                           
+host = "0.0.0.0"                           
 print host
 port = 2738 
 # bind to the port

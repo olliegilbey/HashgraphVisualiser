@@ -17,7 +17,8 @@ def deploy():
     contract_interface = compiled_sol['<stdin>:Voting']
 
     # web3.py instance
-    w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
+    #w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
+    w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 
     # Instantiate and deploy contract
     contract = w3.eth.contract(

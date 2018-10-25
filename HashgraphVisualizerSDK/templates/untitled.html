@@ -66,12 +66,14 @@
 							console.log("Data type: " + datatype);
 
 							if (datatype == "round") {
+                //draw a horisontal line in yellow to show consensus
+
 								console.log("A round came in");
 								console.log(_data[1]);
 								var data = _data[1].split(",");
 								
 								var newtrace = {
-									x:[1, 3], 
+									x:[1, 3], // drawing a horisontal line 
 									y:[data[1], data[1]], 
 									mode: 'markers+lines',
 									type: 'scatter',
@@ -85,7 +87,9 @@
 								// Create the plot
 								var layout = {showlegend: false};
 								Plotly.newPlot('chart', traces, layout);
+
 							} else if (datatype == "line") {
+                // draw a line between two nodes
 								console.log(_data[1]);
 								var data = _data[1].split(",");
 
@@ -104,6 +108,7 @@
 								var myPlot = document.getElementById('chart');
 								
 								if (parentx == nodex && parenty == nodey) {
+                  // It is a root node, make it red
 									console.log("root node at x: " + nodex + 
 											"y: " + nodey);	
 									var newtrace = {
@@ -123,13 +128,13 @@
 									Plotly.newPlot('chart', traces, layout);
 
 								} else {	
-
+                  // it is not a root node, make it black
 									var newtrace = {
 										x:[parentx, nodex], 
 										y:[parenty, nodey], 
 										mode: 'markers+lines',
-										type: 'scatter'
-											//marker: {color: 'black', size: 10}
+										type: 'scatter',
+										marker: {color: 'black', size: 5}
 									};
 
 									traces.push(newtrace);
