@@ -24,7 +24,7 @@ contract Voting {
   }
 
   function vote(uint8[] votes, uint8 voterId) public {
-    for (uint i = 0; i < candidateList.length; i++) {
+    for (uint8 i = 0; i < candidateList.length; i++) {
       assert(voterBalance[voterId] >= votes[i]);
       voterBalance[voterId] -= votes[i];
       votesReceived[candidateList[i]] += votes[i];
