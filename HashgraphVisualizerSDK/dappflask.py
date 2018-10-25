@@ -23,7 +23,9 @@ def dapp():
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
 		int(request.form['slider9']), int(request.form['slider10']), voterId] , transact={'from': w3.eth.accounts[0]} )
 
-		print("balance",web3.eth.getBalance(web3.eth.accounts[0]))
+
+		print("balance",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[0]),'ether'))
+		print("account",w3.eth.accounts[0])
 
 		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
 		print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
