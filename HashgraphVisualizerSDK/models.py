@@ -11,7 +11,7 @@ def deploy(numVoters):
     candidates = [b'Team 1', b'Team 2', b'Team 3', b'Team 4', b'Team 5', b'Team 6', b'Team 7', b'Team 8', b'Team 9', b'Team 10']
 
     # Solidity source code
-    contract_source_code = open('Voting.sol','r').read().replace('\n',' ')
+    contract_source_code = open('VotingOld.sol','r').read().replace('\n',' ')
 
     compiled_sol = compile_source(contract_source_code) # Compiled source code
     contract_interface = compiled_sol['<stdin>:Voting']
