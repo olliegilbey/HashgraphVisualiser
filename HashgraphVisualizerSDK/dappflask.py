@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+studentNums = []
+
 @app.route('/hello')
 def hello_world():
 	return 'Hello, World!'
@@ -16,16 +18,15 @@ def dapp():
 	global contract_instance
 	if request.method == 'POST':
 
-		voterId = 0
+		voterId = studentNums(int(request.form['studnum']))
 
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10']), voterId] , transact={'from': w3.eth.accounts[0]} )
+		int(request.form['slider9']), int(request.form['slider10']), voterId] , transact={'from': w3.eth.accounts[voterId]} )
 
-
-		print("balance",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[0]),'ether'))
-		print("account",w3.eth.accounts[0])
+		print("balance",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
+		print("account",w3.eth.accounts[voterId])
 
 		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
 		print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
@@ -45,6 +46,6 @@ def dapp():
 w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
-contract_instance = deploy()
+contract_instance = deploy(len(studentNums))
 
 app.run(host='0.0.0.0', port=5000)
