@@ -103,6 +103,8 @@
 								console.log(nodey);
 								var nodecolor = data[4];
 								console.log(nodecolor);
+								var isConsensus = data[5];
+								console.log(isConsensus);
 															
 								//graphing
 								var myPlot = document.getElementById('chart');
@@ -136,6 +138,9 @@
 										type: 'scatter',
 										marker: {color: 'black', size: 5}
 									};
+									if (isConsensus == 1) {
+										newtrace.marker = {color: 'red', size: 5}
+									}
 
 									traces.push(newtrace);
 									console.log(traces);
