@@ -25,6 +25,7 @@ def hello_world():
 
 @app.route('/', methods=['POST'])
 def login():
+	global contract_instance
 	if request.method == 'POST':
 		try:
 			voterId = studentNums.index(int(request.form['studnum']))
@@ -36,7 +37,6 @@ def login():
 
 @app.route('/vote', methods=['GET', 'POST'])
 def dapp():
-	global contract_instance
 	if request.method == 'POST':
 
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
