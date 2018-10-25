@@ -15,10 +15,13 @@ def hello_world():
 def dapp():
 	global contract_instance
 	if request.method == 'POST':
+
+		voterId = 0
+
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10'])] , transact={'from': w3.eth.accounts[100]} )
+		int(request.form['slider9']), int(request.form['slider10']), voterId] , transact={'from': w3.eth.accounts[0]} )
 
 		print("balance",web3.eth.getBalance(web3.eth.accounts[0]))
 
@@ -33,7 +36,7 @@ def dapp():
 		print('Votes for Team  9 = {}'.format(contract_instance.totalVotesFor(b"Team 9")))
 		print('Votes for Team 10 = {}'.format(contract_instance.totalVotesFor(b"Team 10")))
 
-	return render_template('dapp.html', TokenVal = 100, SliderVal1 = 0, SliderVal2 = 0,
+	return render_template('dapp.html', TokenVal = getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 	SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 
