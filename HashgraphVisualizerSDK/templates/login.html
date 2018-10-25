@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+		<link href="{{ url_for('static', filename='css/dapp.css') }}" rel="stylesheet">
+		<script async="" type="text/javascript" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+		<script type="text/javascript" async="" src="https://www.google.com/cse/cse.js?cx=012971019331610648934:m2tou3_miwy"></script>
+	</head>
+	<body>
+		<div class="main">
+			<center>
+				<h1>
+					Vote Now!
+				</h1>
+
+				<div class="slider">
+					<h2>{{GreatSuccess}}</h2>
+<					<form method="post" action="/" onsubmit="this.form.submit(); return false">
+
+					Student Number: <input type="number" name="studnum" min="15000000" max="25000000" maxlength="8" minlength="8" required="true"></input>
+
+					{% with messages = get_flashed_messages() %}
+       			{% if messages %}
+          		<ul>
+             		{% for message in messages %}
+             		<li<{{ message }}</li>
+             		{% endfor %}
+          		</ul>
+       			{% endif %}
+    			{% endwith %}
+						<div class="button">
+						<input id="button" name="Clear" value="Clear">
+						<input id="button" type="submit" name="Login" value="Login">
+					</div>
+				</form>
+			</div>
+
+			</center>
+		</div>
+	</body>
+</html>

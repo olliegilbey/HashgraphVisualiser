@@ -18,8 +18,15 @@
 
 				<div class="slider">
 					<form method="post" action="/" onsubmit="this.form.submit(); return false">
-
-						Student Number: <input type="number" name="studnum" min="15000000" max="25000000" maxlength="8" required="true"></input>
+						{% with messages = get_flashed_messages() %}
+         			{% if messages %}
+            		<ul>
+               		{% for message in messages %}
+               		<li<{{ message }}</li>
+               		{% endfor %}
+            		</ul>
+         			{% endif %}
+      			{% endwith %}
 						<p>You Have {{TokenVal}} Team9 tokens to vote with</p>
 
 						<table>
@@ -169,7 +176,7 @@ slideval10.oninput = function() {
 
 						</table>
 						<div class="button">
-							<input id="button" type="submit" name="Clear" value="Clear">
+							<input id="button" name="Clear" value="Clear">
 							<input id="button" type="submit" name="Vote" value="Vote">
 						</div>
 					</form>
