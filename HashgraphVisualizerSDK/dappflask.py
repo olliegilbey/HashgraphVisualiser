@@ -20,15 +20,15 @@ def dapp():
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
 		int(request.form['slider9']), int(request.form['slider10'])] , transact={'from': w3.eth.accounts[0]} )
 
-		print('Votes for Team 1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
-		print('Votes for Team 2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
-		print('Votes for Team 3 = {}'.format(contract_instance.totalVotesFor(b"Team 3")))
-		print('Votes for Team 4 = {}'.format(contract_instance.totalVotesFor(b"Team 4")))
-		print('Votes for Team 5 = {}'.format(contract_instance.totalVotesFor(b"Team 5")))
-		print('Votes for Team 6 = {}'.format(contract_instance.totalVotesFor(b"Team 6")))
-		print('Votes for Team 7 = {}'.format(contract_instance.totalVotesFor(b"Team 7")))
-		print('Votes for Team 8 = {}'.format(contract_instance.totalVotesFor(b"Team 8")))
-		print('Votes for Team 9 = {}'.format(contract_instance.totalVotesFor(b"Team 9")))
+		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
+		print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
+		print('Votes for Team  3 = {}'.format(contract_instance.totalVotesFor(b"Team 3")))
+		print('Votes for Team  4 = {}'.format(contract_instance.totalVotesFor(b"Team 4")))
+		print('Votes for Team  5 = {}'.format(contract_instance.totalVotesFor(b"Team 5")))
+		print('Votes for Team  6 = {}'.format(contract_instance.totalVotesFor(b"Team 6")))
+		print('Votes for Team  7 = {}'.format(contract_instance.totalVotesFor(b"Team 7")))
+		print('Votes for Team  8 = {}'.format(contract_instance.totalVotesFor(b"Team 8")))
+		print('Votes for Team  9 = {}'.format(contract_instance.totalVotesFor(b"Team 9")))
 		print('Votes for Team 10 = {}'.format(contract_instance.totalVotesFor(b"Team 10")))
 
 	return render_template('dapp.html', TokenVal = 100, SliderVal1 = 0, SliderVal2 = 0,
