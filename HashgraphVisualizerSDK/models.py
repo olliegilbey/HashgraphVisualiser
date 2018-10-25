@@ -6,7 +6,7 @@ from web3 import Web3, HTTPProvider, TestRPCProvider
 from solc import compile_source
 from web3.contract import ConciseContract
 
-def deploy():
+def deploy(numVoters):
     # transform the string literals to bytes in order to pass it to solidity
     candidates = [b'Team 1', b'Team 2', b'Team 3', b'Team 4', b'Team 5', b'Team 6', b'Team 7', b'Team 8', b'Team 9', b'Team 10']
 
@@ -27,7 +27,7 @@ def deploy():
     )
 
     # Get transaction hash from deployed contract
-    tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0], 'gas': 4700000}, args=[candidates])
+    tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0], 'gas': 4700000}, args=[candidates, numVoters])
 
     # Get tx receipt to get contract address
     tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
