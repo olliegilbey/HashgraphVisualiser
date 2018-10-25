@@ -27,7 +27,7 @@ def deploy(numVoters):
     )
 
     # Get transaction hash from deployed contract
-    tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0], 'gas': 4700000}, args=[candidates, numVoters])
+    tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0], 'gas': 4700000}, args=[candidates])
 
     # Get tx receipt to get contract address
     tx_receipt = w3.eth.getTransactionReceipt(tx_hash)

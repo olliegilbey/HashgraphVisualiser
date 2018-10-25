@@ -45,7 +45,7 @@ def dapp():
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10']), voterId] , transact={'from': w3.eth.accounts[voterId]} )
+		int(request.form['slider9']), int(request.form['slider10']),] , transact={'from': w3.eth.accounts[voterId]} )
 
 		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
 		print("account ",w3.eth.accounts[voterId])
@@ -75,6 +75,6 @@ def dapp():
 w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
-contract_instance = deploy(71)
+contract_instance = deploy()
 
 app.run(host='0.0.0.0', port=5000)
