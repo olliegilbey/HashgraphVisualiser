@@ -6,7 +6,7 @@ from web3 import Web3, HTTPProvider, TestRPCProvider
 from solc import compile_source
 from web3.contract import ConciseContract
 
-def deploy(numVoters):
+def deploy():
     # transform the string literals to bytes in order to pass it to solidity
     candidates = [b'Team 1', b'Team 2', b'Team 3', b'Team 4', b'Team 5', b'Team 6', b'Team 7', b'Team 8', b'Team 9', b'Team 10']
 
