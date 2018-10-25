@@ -34,10 +34,13 @@ def login():
 			SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 		except ValueError as e:
 			flash('Error, don\'t try your shit around here, your student number isn\'t valid')
+	return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
+
 
 @app.route('/vote', methods=['GET', 'POST'])
 def dapp():
 	if request.method == 'POST':
+		global contract_instance
 
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
@@ -72,6 +75,6 @@ def dapp():
 w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
-contract_instance = deploy(int(len(studentNums)))
+contract_instance = deploy(71)
 
 app.run(host='0.0.0.0', port=5000)
