@@ -18,7 +18,9 @@ def dapp():
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10'])] , transact={'from': w3.eth.accounts[0]} )
+		int(request.form['slider9']), int(request.form['slider10'])] , transact={'from': w3.eth.accounts[100]} )
+
+		print("balance",web3.eth.getBalance(web3.eth.accounts[0]))
 
 		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
 		print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))

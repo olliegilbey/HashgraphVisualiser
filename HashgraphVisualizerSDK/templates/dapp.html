@@ -18,6 +18,8 @@
 
 				<div class="slider">
 					<form method="post" action="/" onsubmit="this.form.submit(); return false">
+
+						Student Number: <input type="number" name="studnum" min="15000000" max="25000000" maxlength="8" required="true"></input>
 						<p>You Have {{TokenVal}} Team9 tokens to vote with</p>
 
 						<table>
@@ -102,7 +104,7 @@
 							</tr>
 
 							<script>
-								var slideval1 = document.getElementById("rangeinput1");
+var slideval1 = document.getElementById("rangeinput1");
 var slideval2 = document.getElementById("rangeinput2");
 var slideval3 = document.getElementById("rangeinput3");
 var slideval4 = document.getElementById("rangeinput4");
@@ -112,6 +114,7 @@ var slideval7 = document.getElementById("rangeinput7");
 var slideval8 = document.getElementById("rangeinput8");
 var slideval9 = document.getElementById("rangeinput9");
 var slideval10 = document.getElementById("rangeinput10");
+
 var rangeval1 = document.getElementById("rangevalue1");
 var rangeval2 = document.getElementById("rangevalue2");
 var rangeval3 = document.getElementById("rangevalue3");
