@@ -1,4 +1,4 @@
-package: github.com/andrecronje/evm
+package: github.com/group9/HashgraphVisualiser/evm
 import:
 - package: github.com/andrecronje/lachesis
 - package: github.com/ethereum/go-ethereum

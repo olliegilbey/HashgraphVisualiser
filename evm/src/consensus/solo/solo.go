@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/andrecronje/evm/src/service"
-	"github.com/andrecronje/evm/src/state"
+	"github.com/group9/HashgraphVisualiser/evm/src/service"
+	"github.com/group9/HashgraphVisualiser/evm/src/state"
 	"github.com/sirupsen/logrus"
 )
 

@@ -11,9 +11,9 @@ import (
 	"github.com/andrecronje/lachesis/src/node"
 	"github.com/andrecronje/lachesis/src/peers"
 	serv "github.com/andrecronje/lachesis/src/service"
-	"github.com/andrecronje/evm/src/service"
-	"github.com/andrecronje/evm/src/state"
-	"github.com/andrecronje/evm/src/config"
+	"github.com/group9/HashgraphVisualiser/evm/src/service"
+	"github.com/group9/HashgraphVisualiser/evm/src/state"
+	"github.com/group9/HashgraphVisualiser/evm/src/config"
 	"github.com/sirupsen/logrus"
 )
 

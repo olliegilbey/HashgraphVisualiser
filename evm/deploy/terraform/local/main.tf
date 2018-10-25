@@ -22,7 +22,7 @@ resource "docker_container" "evm" {
   name     = "node${count.index}"
   hostname = "node${count.index}"
 
-  image = "andrecronje/evm:${var.version}"
+  image = "group9/HashgraphVisualiser/evm:${var.version}"
 
   networks = ["${docker_network.private_network.name}"]
 

@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/andrecronje/evm/src/version"
+	"github.com/group9/HashgraphVisualiser/evm/src/version"
 	"github.com/spf13/cobra"
 )
 

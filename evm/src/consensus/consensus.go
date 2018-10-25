@@ -1,8 +1,8 @@
 package consensus
 
 import (
-	"github.com/andrecronje/evm/src/service"
-	"github.com/andrecronje/evm/src/state"
+	"github.com/group9/HashgraphVisualiser/evm/src/service"
+	"github.com/group9/HashgraphVisualiser/evm/src/state"
 )
 
 // Consensus is the interface that abstracts the consensus system
