@@ -22,6 +22,10 @@ h1 {
 	padding-bottom: 0;
 }
 
+#slider {
+  overflow: hidden;
+  width: 100%;
+}
 
 #main {
 	margin: 30px;
