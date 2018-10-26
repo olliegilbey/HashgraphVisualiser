@@ -43,8 +43,8 @@ def login():
 
 @app.route('/vote', methods=['GET', 'POST'])
 def dapp():
-	global contract_instance
-	global voterId
+	#global contract_instance
+	#global voterId
 	if request.method == 'POST':
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
