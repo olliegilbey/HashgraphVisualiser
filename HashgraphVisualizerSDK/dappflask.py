@@ -73,8 +73,8 @@ def dapp(currVoterId):
 		if(remainingVotes > 0):
 			print("STILL HAS VOTES REMAINING")
 		else:
-			return redirect(url_for(''))
-			#return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
+			#return redirect(url_for('/'))
+			return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 
 	return render_template('dapp.html', TokenVal = 100, SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
