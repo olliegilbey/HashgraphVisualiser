@@ -83,13 +83,11 @@ w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
 contract_instance = deploy(len(studentNums))
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
 
-if __name__ == "__main__":
-    app.secret_key = 'super secret key'
-    app.config['SESSION_TYPE'] = 'filesystem'
+sess.init_app(app)
 
-    sess.init_app(app)
-
-    app.debug = True
-    #app.run()
-	app.run(host='0.0.0.0', port=5000)
+app.debug = True
+#app.run()
+app.run(host='0.0.0.0', port=5000)
