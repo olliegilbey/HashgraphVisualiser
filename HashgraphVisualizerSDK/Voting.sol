@@ -3,28 +3,29 @@ pragma solidity ^0.4.18;
 contract Voting {
 
   bytes32[] public candidateList;
-  mapping (bytes32 => uint8) public votesReceived;
+  mapping (bytes32 => uint) public votesReceived;
 
-  uint8[] public voterBalance;
+  uint[] public voterBalance;
 
-  constructor(bytes32[] candidateNames, uint8 numVoters) public {
+  constructor(bytes32[] candidateNames, uint numVoters) public {
     candidateList = candidateNames;
-    for (uint8 i = 0; i < numVoters; i++) {
+    voterBalance = new uint[](numVoters);
+    for (uint i = 0; i < numVoters; i++) {
       voterBalance[i] = 100;
     }
   }
 
-  function getVotesRemaining(uint8 voterId) view public returns (uint8) {
+  function getVotesRemaining(uint voterId) view public returns (uint) {
     return voterBalance[voterId];
   }
 
-  function totalVotesFor(bytes32 candidate) view public returns (uint8) {
+  function totalVotesFor(bytes32 candidate) view public returns (uint) {
     assert(validCandidate(candidate));
     return votesReceived[candidate];
   }
 
-  function vote(uint8[] votes, uint8 voterId) public {
-    for (uint8 i = 0; i < candidateList.length; i++) {
+  function vote(uint[] votes, uint voterId) public {
+    for (uint i = 0; i < candidateList.length; i++) {
       assert(voterBalance[voterId] >= votes[i]);
       voterBalance[voterId] -= votes[i];
       votesReceived[candidateList[i]] += votes[i];
@@ -32,7 +33,7 @@ contract Voting {
   }
 
   function validCandidate(bytes32 candidate) view public returns (bool) {
-    for(uint8 i = 0; i < candidateList.length; i++) {
+    for(uint i = 0; i < candidateList.length; i++) {
       if (candidateList[i] == candidate) {
         return true;
       }

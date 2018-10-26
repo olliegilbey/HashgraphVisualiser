@@ -47,6 +47,8 @@ def dapp():
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
 		int(request.form['slider9']), int(request.form['slider10'])], voterId , transact={'from': w3.eth.accounts[voterId]} )
 
+		#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 7 , transact={'from': w3.eth.accounts[7]} )
+
 		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
 		print("account ",w3.eth.accounts[voterId])
 		remainingVotes = contract_instance.getVotesRemaining(voterId)
