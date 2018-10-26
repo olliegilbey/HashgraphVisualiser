@@ -79,7 +79,7 @@ def dapp(currVoterId):
 				#return redirect(url_for('/'))
 				return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 		else:
-			flashstring = "You only have " + contract_instance.getVotesRemaining(int(voterId)) + " votes to use."
+			flashstring = "You only have " + str(contract_instance.getVotesRemaining(int(voterId))) + " votes to use."
 			flash(TokenVal)
 
 	return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(int(voterId)), SliderVal1 = 0, SliderVal2 = 0,
