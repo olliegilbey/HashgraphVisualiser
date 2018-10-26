@@ -26,10 +26,9 @@ def hello_world():
 
 @app.route('/', methods=['POST'])
 def login():
-	global contract_instance
-	global voterId
-
 	if request.method == 'POST':
+		global contract_instance
+		global voterId
 		try:
 			voterId = studentNums.index(int(request.form['studnum']))
 			return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
