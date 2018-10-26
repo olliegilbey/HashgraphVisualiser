@@ -31,9 +31,10 @@ def login():
 	if request.method == 'POST':
 		try:
 			voterId = studentNums.index(int(request.form['studnum']))
-			return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
-			SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
-			SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
+			#return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
+			#SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
+			#SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
+			return redirect(url_for('dapp',currVoterId=voterId))
 		except ValueError as e:
 			flash('Error, don\'t try your shit around here, your student number isn\'t valid')
 			print("Invalid Student Number")
@@ -41,8 +42,8 @@ def login():
 	return render_template('login.html', GreatSuccess = "Input Student Number", name = "Login")
 
 
-@app.route('/vote', methods=['GET', 'POST'])
-def dapp():
+@app.route('/dapp', methods=['GET', 'POST'])
+def dapp(currVoterId):
 	global contract_instance
 	global voterId
 	if request.method == 'POST':
