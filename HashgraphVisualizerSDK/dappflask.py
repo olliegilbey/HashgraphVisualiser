@@ -49,34 +49,43 @@ def dapp(currVoterId):
 	global voterId
 	voterId = int(currVoterId)
 	if request.method == 'POST':
-		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
-		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
-		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10'])], int(voterId) , transact={'from': w3.eth.accounts[int(voterId)]} )
+		sumvotes = int(request.form['slider1']) + int(request.form['slider2']) +
+		int(request.form['slider3']) + int(request.form['slider4']) + int(request.form['slider5']) +
+		int(request.form['slider6']) + int(request.form['slider7']) + int(request.form['slider8']) +
+		int(request.form['slider9']) + int(request.form['slider10'])
 
-		#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 0 , transact={'from': w3.eth.accounts[7]} )
-		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
-		print("account ",w3.eth.accounts[voterId])
-		remainingVotes = contract_instance.getVotesRemaining(voterId)
-		print("votes remaining ", remainingVotes)
+		if sumvotes <= 100:
+			contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
+			int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
+			int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
+			int(request.form['slider9']), int(request.form['slider10'])], int(voterId) , transact={'from': w3.eth.accounts[int(voterId)]} )
 
-		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
-		print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
-		print('Votes for Team  3 = {}'.format(contract_instance.totalVotesFor(b"Team 3")))
-		print('Votes for Team  4 = {}'.format(contract_instance.totalVotesFor(b"Team 4")))
-		print('Votes for Team  5 = {}'.format(contract_instance.totalVotesFor(b"Team 5")))
-		print('Votes for Team  6 = {}'.format(contract_instance.totalVotesFor(b"Team 6")))
-		print('Votes for Team  7 = {}'.format(contract_instance.totalVotesFor(b"Team 7")))
-		print('Votes for Team  8 = {}'.format(contract_instance.totalVotesFor(b"Team 8")))
-		print('Votes for Team  9 = {}'.format(contract_instance.totalVotesFor(b"Team 9")))
-		print('Votes for Team 10 = {}'.format(contract_instance.totalVotesFor(b"Team 10")))
-		if(remainingVotes > 0):
-			print("STILL HAS VOTES REMAINING")
+			#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 0 , transact={'from': w3.eth.accounts[7]} )
+			print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
+			print("account ",w3.eth.accounts[voterId])
+			remainingVotes = contract_instance.getVotesRemaining(voterId)
+			print("votes remaining ", remainingVotes)
+
+			print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
+			print('Votes for Team  2 = {}'.format(contract_instance.totalVotesFor(b"Team 2")))
+			print('Votes for Team  3 = {}'.format(contract_instance.totalVotesFor(b"Team 3")))
+			print('Votes for Team  4 = {}'.format(contract_instance.totalVotesFor(b"Team 4")))
+			print('Votes for Team  5 = {}'.format(contract_instance.totalVotesFor(b"Team 5")))
+			print('Votes for Team  6 = {}'.format(contract_instance.totalVotesFor(b"Team 6")))
+			print('Votes for Team  7 = {}'.format(contract_instance.totalVotesFor(b"Team 7")))
+			print('Votes for Team  8 = {}'.format(contract_instance.totalVotesFor(b"Team 8")))
+			print('Votes for Team  9 = {}'.format(contract_instance.totalVotesFor(b"Team 9")))
+			print('Votes for Team 10 = {}'.format(contract_instance.totalVotesFor(b"Team 10")))
+			if(remainingVotes > 0):
+				print("STILL HAS VOTES REMAINING")
+			else:
+				#return redirect(url_for('/'))
+				return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 		else:
-			#return redirect(url_for('/'))
-			return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
+			flashstring = "You only have " + TokenVal + " votes to use."
+			flash(TokenVal)
 
-	return render_template('dapp.html', TokenVal = 100, SliderVal1 = 0, SliderVal2 = 0,
+	return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining[voterId], SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 	SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 
