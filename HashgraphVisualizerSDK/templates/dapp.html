@@ -19,14 +19,15 @@
 				<div class="slider">
 					<form method="post" action="/" onsubmit="this.form.submit(); return false">
 						{% with messages = get_flashed_messages() %}
-         			{% if messages %}
-            		<ul>
-               		{% for message in messages %}
-               		<li<{{ message }}</li>
-               		{% endfor %}
-            		</ul>
-         			{% endif %}
-      			{% endwith %}
+  						{% if messages %}
+    					<ul class=flashes>
+    					{% for message in messages %}
+      					<li>{{ message }}</li>
+    					{% endfor %}
+    					</ul>
+  						{% endif %}
+						{% endwith %}
+						{% block body %}{% endblock %}
 						<p>You Have {{TokenVal}} Team9 tokens to vote with</p>
 
 						<table>
