@@ -43,8 +43,8 @@ def login():
 
 @app.route('/vote', methods=['GET', 'POST'])
 def dapp():
-	#global contract_instance
-	#global voterId
+	global contract_instance
+	global voterId
 	if request.method == 'POST':
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
@@ -84,6 +84,6 @@ w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 # deploy the Voting contract to ganache
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-contract_instance = deploy(len(studentNums))
+contract_instance = deploy(71)
 #app.run(debug=True)
 app.run(host='0.0.0.0', port=5000)
