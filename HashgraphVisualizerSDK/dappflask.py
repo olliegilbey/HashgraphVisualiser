@@ -50,7 +50,8 @@ def dapp(currVoterId):
 	voterId = int(currVoterId)
 	if request.method == 'POST':
 		sumvotes = int(request.form['slider1']) + int(request.form['slider2']) + int(request.form['slider3']) + int(request.form['slider4']) + int(request.form['slider5']) + int(request.form['slider6']) + int(request.form['slider7']) + int(request.form['slider8']) + int(request.form['slider9']) + int(request.form['slider10'])
-		if sumvotes <= TokenVal:
+
+		if sumvotes <= contract_instance.getVotesRemaining(int(voterId)):
 			contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 			int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 			int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
