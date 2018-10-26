@@ -59,7 +59,8 @@ def dapp(currVoterId):
 
 			#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 0 , transact={'from': w3.eth.accounts[7]} )
 			print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
-			print("account ",w3.eth.accounts[voterId])
+			print("student",studentNums[voterId])
+			#print("account ",w3.eth.accounts[voterId])
 			remainingVotes = contract_instance.getVotesRemaining(voterId)
 			print("votes remaining ", remainingVotes)
 
