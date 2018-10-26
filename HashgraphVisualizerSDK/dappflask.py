@@ -53,7 +53,7 @@ def dapp(currVoterId):
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10'])], int(voterId) , transact={'from': w3.eth.accounts[voterId]} )
+		int(request.form['slider9']), int(request.form['slider10'])], int(voterId) , transact={'from': w3.eth.accounts[int(voterId)]} )
 
 
 		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
@@ -77,7 +77,7 @@ def dapp(currVoterId):
 			return redirect(url_for(''))
 			#return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 
-	return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
+	return render_template('dapp.html', TokenVal = 100, SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 	SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 
