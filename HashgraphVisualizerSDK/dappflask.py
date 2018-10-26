@@ -45,6 +45,7 @@ def login():
 @app.route('/dapp/<currVoterId>', methods=['GET', 'POST'])
 def dapp(currVoterId):
 	print("Dapp Function Entered")
+	contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 7 , transact={'from': w3.eth.accounts[7]} )
 	global contract_instance
 	global voterId
 	voterId = currVoterId
@@ -54,11 +55,10 @@ def dapp(currVoterId):
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
 		int(request.form['slider9']), int(request.form['slider10'])], voterId , transact={'from': w3.eth.accounts[voterId]} )
 
-		#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 7 , transact={'from': w3.eth.accounts[7]} )
 
 		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
 		print("account ",w3.eth.accounts[voterId])
-		remainingVotes = contract_instance.getVotesRemaining(voterId)
+		#remainingVotes = contract_instance.getVotesRemaining(voterId)
 		print("votes remaining ", remainingVotes)
 
 		print('Votes for Team  1 = {}'.format(contract_instance.totalVotesFor(b"Team 1")))
