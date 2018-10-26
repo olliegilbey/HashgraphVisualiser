@@ -26,22 +26,23 @@ def hello_world():
 @app.route('/', methods=['POST'])
 def login():
 	global contract_instance
+	global voterId
 	if request.method == 'POST':
 		try:
 			voterId = studentNums.index(int(request.form['studnum']))
-			return render_template('dapp.html', TokenVal = getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
+			return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
 			SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 			SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 		except ValueError as e:
 			flash('Error, don\'t try your shit around here, your student number isn\'t valid')
-	return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
+	return render_template('login.html', name="Login", GreatSuccess="")
 
 
 @app.route('/vote', methods=['GET', 'POST'])
 def dapp():
 	if request.method == 'POST':
 		global contract_instance
-
+		global voterId
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
@@ -69,7 +70,7 @@ def dapp():
 		else:
 			return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 
-	return render_template('dapp.html', TokenVal = getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
+	return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 	SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 
@@ -77,6 +78,6 @@ def dapp():
 w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
-contract_instance = deploy(71)
+contract_instance = deploy(len(studentNums))
 
 app.run(host='0.0.0.0', port=5000)
