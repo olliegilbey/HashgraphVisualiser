@@ -42,7 +42,7 @@ def login():
 	return render_template('login.html', GreatSuccess = "Input Student Number", name = "Login")
 
 
-@app.route('/dapp', methods=['GET', 'POST'])
+@app.route('/dapp/<currVoterId>', methods=['GET', 'POST'])
 def dapp(currVoterId):
 	global contract_instance
 	global voterId
