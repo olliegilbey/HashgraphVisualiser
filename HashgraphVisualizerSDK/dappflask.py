@@ -1,6 +1,6 @@
 import socket
 from models import *
-from flask import Flask, render_template, request, url_for, flash
+from flask import Flask, render_template, request, url_for, flash, redirect
 from web3 import Web3
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def login():
 			SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
 			SliderVal8 = 0, SliderVal9 = 0, SliderVal10 = 0, name = "DApp")
 		except ValueError as e:
-			#flash('Error, don\'t try your shit around here, your student number isn\'t valid')
+			flash('Error, don\'t try your shit around here, your student number isn\'t valid')
 			print("Invalid Student Number")
 
 	return render_template('login.html', GreatSuccess = "Input Student Number", name = "Login")
@@ -71,7 +71,8 @@ def dapp():
 		if(remainingVotes > 0):
 			print("STILL HAS VOTES REMAINING")
 		else:
-			return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
+			return redirect(url_for(''))
+			#return render_template('login.html', name="Login", GreatSuccess="Successful Vote")
 
 	return render_template('dapp.html', TokenVal = contract_instance.getVotesRemaining(voterId), SliderVal1 = 0, SliderVal2 = 0,
 	SliderVal3 = 0, SliderVal4 = 0, SliderVal5 = 0, SliderVal6 = 0, SliderVal7 = 0,
