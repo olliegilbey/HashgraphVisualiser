@@ -47,13 +47,13 @@ def dapp(currVoterId):
 	print("Dapp Function Entered")
 	global contract_instance
 	global voterId
-	contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 0 , transact={'from': w3.eth.accounts[7]} )
+	#contract_instance.vote( [0,1,2,3,4,5,6,7,8,9], 0 , transact={'from': w3.eth.accounts[7]} )
 	voterId = int(currVoterId)
 	if request.method == 'POST':
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
 		int(request.form['slider6']), int(request.form['slider7']), int(request.form['slider8']),
-		int(request.form['slider9']), int(request.form['slider10'])], voterId , transact={'from': w3.eth.accounts[voterId]} )
+		int(request.form['slider9']), int(request.form['slider10'])], int(voterId) , transact={'from': w3.eth.accounts[voterId]} )
 
 
 		print("balance ",w3.fromWei(w3.eth.getBalance(w3.eth.accounts[voterId]),'ether'))
