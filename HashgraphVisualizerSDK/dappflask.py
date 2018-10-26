@@ -82,8 +82,8 @@ def dapp():
 w3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 #w3 = Web3(HTTPProvider("http://172.19.0.2:6000"))
 # deploy the Voting contract to ganache
-contract_instance = deploy(len(studentNums))
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
+contract_instance = deploy(len(studentNums))
 #app.run(debug=True)
 app.run(host='0.0.0.0', port=5000)
