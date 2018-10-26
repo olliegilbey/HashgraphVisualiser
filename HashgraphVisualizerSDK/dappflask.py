@@ -44,8 +44,10 @@ def login():
 
 @app.route('/dapp/<currVoterId>', methods=['GET', 'POST'])
 def dapp(currVoterId):
+	print("Dapp Function Entered")
 	global contract_instance
 	global voterId
+	voterId = currVoterId
 	if request.method == 'POST':
 		contract_instance.vote( [int(request.form['slider1']), int(request.form['slider2']),
 		int(request.form['slider3']), int(request.form['slider4']), int(request.form['slider5']),
